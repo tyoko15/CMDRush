@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7786146445012491723}
   - component: {fileID: 7774104629727876868}
+  - component: {fileID: 1762341923088678268}
   - component: {fileID: 5097977137337264043}
   m_Layer: 5
-  m_Name: cmd (0)
+  m_Name: cmd
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 300, y: 0}
-  m_SizeDelta: {x: 150, y: 150}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7774104629727876868
 CanvasRenderer:
@@ -45,6 +46,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6019914153956950811}
   m_CullTransparentMesh: 1
+--- !u!114 &1762341923088678268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6019914153956950811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70439009d3096854495d3ba7f2535e69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Notes
+  data:
+    number: 0
+    type: 0
+  spawnTime: 0.1
+  moveFlag: 0
+  moveTime: 0.01
 --- !u!114 &5097977137337264043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,7 +84,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8680797543115379092, guid: e1f8f1afce1e8c24ea524359e90c1e1f, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
