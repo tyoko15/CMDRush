@@ -6,13 +6,12 @@ using TMPro;
 
 public class NotesManager : MonoBehaviour
 {
-    public static NotesManager Instance;
     public int playerNumber;
     public Gamepad gamepad;
     [SerializeField] GameObject notesPrefab;
     [SerializeField] Sprite[] notesSprites;
     public Vector3[] positions = new Vector3[5];
-    List<Notes> notesList = new List<Notes>();
+    [HideInInspector] List<Notes> notesList = new List<Notes>();
 
     [SerializeField] GameObject playerUI;
     TextMeshProUGUI roundText;
@@ -47,7 +46,6 @@ public class NotesManager : MonoBehaviour
 
     void Start()
     {
-        Instance = this;
         Init();
         setUpNotesFlag = true;
 
@@ -171,7 +169,7 @@ public class NotesManager : MonoBehaviour
     {
         if (!delayFlag)
         {
-            if (gamepad != null) gamepad.SetMotorSpeeds(0.01f, 0.01f);
+            if (gamepad != null) gamepad.SetMotorSpeeds(0.1f, 0.1f);
             for (int i = 0; i < notesList.Count; i++)
             {
                 notesList[i].failureFlag = true;
@@ -224,6 +222,7 @@ public class NotesManager : MonoBehaviour
     {
         totalCorrectAnswer += addQuestion;
         roundCount++;
+        score += 1000;
         correctAnswerRate = 0;
         notesCount = 0;
         setUpNotesFlag = true;
@@ -233,6 +232,7 @@ public class NotesManager : MonoBehaviour
     {
         if (commandFlag)
         {
+            if (notesList.Count == 0) return;
             if ((int)notesList[0].data.type == selectCommand)
             {
                 currentAmount = countDownImage.fillAmount;
@@ -266,6 +266,12 @@ public class NotesManager : MonoBehaviour
         roundText.text = $"Round {roundCount.ToString("00")}";
         scoreText.text = $"Score {score.ToString("000000")}";
         correctAnswerRateText.text = $"{correctAnswerRate.ToString("00")} / {totalCorrectAnswer.ToString("00")}";
+    }
+
+    public void SetSelectCommand(int i)
+    {
+        selectCommand = i;
+        commandFlag = true;
     }
 
     public void OnA(InputValue value)

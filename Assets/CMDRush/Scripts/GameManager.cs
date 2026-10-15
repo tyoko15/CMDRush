@@ -37,7 +37,8 @@ public class GameManager : MonoBehaviour
         Instance = this;
         Init(); 
         SetUpController();
-        
+        //readyFlags[0] = true;
+        //readyFlags[1] = true;
     }
 
     void Update()
@@ -52,7 +53,8 @@ public class GameManager : MonoBehaviour
                 readyTimer = 0f;
                 readyFlags[0] = false;
                 readyFlags[1] = false;
-                startFlag = true;
+            startFlag = true;
+
             }
             else readyTimer += Time.deltaTime;
         }
@@ -69,75 +71,83 @@ public class GameManager : MonoBehaviour
 
         startCountDownText = gameUI.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         gameTimerText = gameUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-        gameTimerText.text = $"03:00";
+        gameTimerText.text = $"01:00";
     }
 
     void SetUpController()
     {
         var gamepads = Gamepad.all;
 
-        // コントローラーの接続なし
-        if (gamepads.Count == 0)
-        {
-            notesManagers[0].playerNumber = 0;
-            notesManagers[0].gamepad = null;
-            notesManagers[1].playerNumber = 1;
-            notesManagers[1].gamepad = null;
-
-            inputTexts[0].text = $"Input : Keyboard\n(WASD)";
-            instructionTexts[0].text = $"pless W";
-            inputTexts[1].text = $"Input : Keyboard\n(Arrows)";
-            instructionTexts[1].text = $"pless UpArrow";
-
-            if (readyFlags[0]) instructionTexts[0].color = Color.green;
-            else instructionTexts[0].color = Color.white;
-            if (readyFlags[1]) instructionTexts[1].color = Color.green;
-            else instructionTexts[1].color = Color.white;
-        }
-        // 　コントローラー1つ目
-        if (gamepads.Count >= 1)
-        {
-            notesManagers[0].playerNumber = 0;
-            notesManagers[0].gamepad = gamepads[0];
-            playerInputs[0].user.UnpairDevices();
-            InputUser.PerformPairingWithDevice(gamepads[0], playerInputs[0].user);
-            notesManagers[1].playerNumber = 1;
-            notesManagers[1].gamepad = null;
-            playerInputs[1].user.UnpairDevices();
-            InputUser.PerformPairingWithDevice(Keyboard.current, playerInputs[1].user);
-
-            inputTexts[0].text = $"Input : Controller\n(ABXY)";
-            instructionTexts[0].text = $"pless X";
-            inputTexts[1].text = $"Input : Keyboard\n(WASD)";
-            instructionTexts[1].text = $"pless W";
-            
-            if (readyFlags[0]) instructionTexts[0].color = Color.green;
-            else instructionTexts[0].color = Color.white;
-            if (readyFlags[1]) instructionTexts[1].color = Color.green;
-            else instructionTexts[1].color = Color.white;
-        }
-        // 　コントローラー2つ接続の場合
         if (gamepads.Count >= 2)
         {
-            notesManagers[0].playerNumber = 0;
-            notesManagers[0].gamepad = gamepads[0];
-            playerInputs[0].user.UnpairDevices();
-            InputUser.PerformPairingWithDevice(gamepads[0], playerInputs[0].user);
-            notesManagers[1].playerNumber = 1;
-            notesManagers[1].gamepad = gamepads[1];
-            playerInputs[1].user.UnpairDevices();
-            InputUser.PerformPairingWithDevice(gamepads[1], playerInputs[1].user);
-
             inputTexts[0].text = $"Input : Controller\n(ABXY)";
-            instructionTexts[0].text = $"pless X"; 
+            instructionTexts[0].text = $"pless X";
             inputTexts[1].text = $"Input : Controller\n(ABXY)";
             instructionTexts[1].text = $"pless X";
-            
+
             if (readyFlags[0]) instructionTexts[0].color = Color.green;
             else instructionTexts[0].color = Color.white;
             if (readyFlags[1]) instructionTexts[1].color = Color.green;
             else instructionTexts[1].color = Color.white;
         }
+
+        // コントローラーの接続なし
+        //if (gamepads.Count == 0)
+        //{
+        //    notesManagers[0].playerNumber = 0;
+        //    notesManagers[1].playerNumber = 1;
+
+        //    inputTexts[0].text = $"Input : Keyboard\n(WASD)";
+        //    instructionTexts[0].text = $"pless W";
+        //    inputTexts[1].text = $"Input : Keyboard\n(Arrows)";
+        //    instructionTexts[1].text = $"pless UpArrow";
+
+        //    if (readyFlags[0]) instructionTexts[0].color = Color.green;
+        //    else instructionTexts[0].color = Color.white;
+        //    if (readyFlags[1]) instructionTexts[1].color = Color.green;
+        //    else instructionTexts[1].color = Color.white;
+        //}
+        //// 　コントローラー1つ目
+        //if (gamepads.Count >= 1)
+        //{
+        //    notesManagers[0].playerNumber = 0;
+        //    notesManagers[0].gamepad = gamepads[0];
+        //    InputUser.PerformPairingWithDevice(gamepads[0], playerInputs[0].user);
+        //    notesManagers[1].playerNumber = 1;
+        //    InputUser.PerformPairingWithDevice(Keyboard.current, playerInputs[1].user);
+
+        //    inputTexts[0].text = $"Input : Controller\n(ABXY)";
+        //    instructionTexts[0].text = $"pless X";
+        //    inputTexts[1].text = $"Input : Keyboard\n(WASD)";
+        //    instructionTexts[1].text = $"pless W";
+
+        //    if (readyFlags[0]) instructionTexts[0].color = Color.green;
+        //    else instructionTexts[0].color = Color.white;
+        //    if (readyFlags[1]) instructionTexts[1].color = Color.green;
+        //    else instructionTexts[1].color = Color.white;
+        //}
+        //// 　コントローラー2つ接続の場合
+        //if (gamepads.Count >= 2)
+        //{
+        //    notesManagers[0].playerNumber = 0;
+        //    notesManagers[0].gamepad = gamepads[0];
+        //    playerInputs[0].user.UnpairDevices();
+        //    InputUser.PerformPairingWithDevice(gamepads[0], playerInputs[0].user);
+        //    notesManagers[1].playerNumber = 1;
+        //    notesManagers[1].gamepad = gamepads[1];
+        //    playerInputs[1].user.UnpairDevices();
+        //    InputUser.PerformPairingWithDevice(gamepads[1], playerInputs[1].user);
+
+        //    inputTexts[0].text = $"Input : Controller\n(ABXY)";
+        //    instructionTexts[0].text = $"pless X"; 
+        //    inputTexts[1].text = $"Input : Controller\n(ABXY)";
+        //    instructionTexts[1].text = $"pless X";
+
+        //    if (readyFlags[0]) instructionTexts[0].color = Color.green;
+        //    else instructionTexts[0].color = Color.white;
+        //    if (readyFlags[1]) instructionTexts[1].color = Color.green;
+        //    else instructionTexts[1].color = Color.white;
+        //}
     }
 
     void NotesManagerSetUp()

@@ -5,7 +5,6 @@ public enum NotesType
     Right, Left, Up, Down
 }
 
-[System.Serializable]
 public class NotesData
 {
     public int number;
