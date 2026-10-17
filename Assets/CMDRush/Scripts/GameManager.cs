@@ -77,19 +77,33 @@ public class GameManager : MonoBehaviour
     void SetUpController()
     {
         var gamepads = Gamepad.all;
-
-        if (gamepads.Count >= 2)
+        if (gamepads.Count == 0)
+        {
+            inputTexts[0].text = $"Input : Keyboard\n(WASD)";
+            instructionTexts[0].text = $"pless W";
+            inputTexts[1].text = $"Input : Keyboard\n(Arrows)";
+            instructionTexts[1].text = $"pless UpArrow";
+        }
+        else if (gamepads.Count == 1)
+        {
+            inputTexts[0].text = $"Input : Controller\n(ABXY)";
+            instructionTexts[0].text = $"pless X";
+            inputTexts[1].text = $"Input : Keyboard\n(WASD)";
+            instructionTexts[1].text = $"pless W";
+        }
+        else if (gamepads.Count == 2)
         {
             inputTexts[0].text = $"Input : Controller\n(ABXY)";
             instructionTexts[0].text = $"pless X";
             inputTexts[1].text = $"Input : Controller\n(ABXY)";
             instructionTexts[1].text = $"pless X";
-
-            if (readyFlags[0]) instructionTexts[0].color = Color.green;
-            else instructionTexts[0].color = Color.white;
-            if (readyFlags[1]) instructionTexts[1].color = Color.green;
-            else instructionTexts[1].color = Color.white;
         }
+
+        if (readyFlags[0]) instructionTexts[0].color = Color.green;
+        else instructionTexts[0].color = Color.white;
+        if (readyFlags[1]) instructionTexts[1].color = Color.green;
+        else instructionTexts[1].color = Color.white;
+
 
         // コントローラーの接続なし
         //if (gamepads.Count == 0)
@@ -97,10 +111,7 @@ public class GameManager : MonoBehaviour
         //    notesManagers[0].playerNumber = 0;
         //    notesManagers[1].playerNumber = 1;
 
-        //    inputTexts[0].text = $"Input : Keyboard\n(WASD)";
-        //    instructionTexts[0].text = $"pless W";
-        //    inputTexts[1].text = $"Input : Keyboard\n(Arrows)";
-        //    instructionTexts[1].text = $"pless UpArrow";
+
 
         //    if (readyFlags[0]) instructionTexts[0].color = Color.green;
         //    else instructionTexts[0].color = Color.white;
@@ -116,10 +127,7 @@ public class GameManager : MonoBehaviour
         //    notesManagers[1].playerNumber = 1;
         //    InputUser.PerformPairingWithDevice(Keyboard.current, playerInputs[1].user);
 
-        //    inputTexts[0].text = $"Input : Controller\n(ABXY)";
-        //    instructionTexts[0].text = $"pless X";
-        //    inputTexts[1].text = $"Input : Keyboard\n(WASD)";
-        //    instructionTexts[1].text = $"pless W";
+
 
         //    if (readyFlags[0]) instructionTexts[0].color = Color.green;
         //    else instructionTexts[0].color = Color.white;

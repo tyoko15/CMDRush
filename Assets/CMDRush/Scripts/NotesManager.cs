@@ -32,8 +32,14 @@ public class NotesManager : MonoBehaviour
     float delayTimer;
 
     bool addNotesFlag;
+    bool addDelayFlag;
+    [SerializeField] float addDelayTime;
+    float addDelayTimer;
 
     bool resetNotesFlag;
+    bool resetDelayFlag;
+    [SerializeField] float resetDelayTime;
+    float resetDelayTimer;
 
     public bool inputAllowedFlag;
     bool commandFlag;
@@ -136,7 +142,7 @@ public class NotesManager : MonoBehaviour
 
     void AddNotes()
     {
-        if (!delayFlag)
+        if (!addDelayFlag)
         {
             if (notesCount != totalCorrectAnswer) 
             {
@@ -146,7 +152,7 @@ public class NotesManager : MonoBehaviour
         }
         else
         {
-            if (delayTimer > delayTime)
+            if (addDelayTimer > addDelayTime)
             {
                 for (int i = 0; i < notesList.Count; i++)
                 {
@@ -154,20 +160,21 @@ public class NotesManager : MonoBehaviour
                     notesList[i].moveFlag = true;
                     notesList[i].data.number++;
                 }
-                delayTimer = 0f;
-                delayFlag = false;
+                addDelayTimer = 0f;
+                addDelayFlag = false;
             }
             else
             {
-                delayTimer += Time.deltaTime;
-                float amount = Mathf.Lerp(currentAmount, 1f, delayTimer / delayTime);
+                addDelayTimer += Time.deltaTime;
+                float amount = Mathf.Lerp(currentAmount, 1f, addDelayTimer / addDelayTime);
                 countDownImage.fillAmount = amount;
             }
         }
     }
+
     void ResetNotes()
     {
-        if (!delayFlag)
+        if (!resetDelayFlag)
         {
             if (gamepad != null) gamepad.SetMotorSpeeds(0.1f, 0.1f);
             for (int i = 0; i < notesList.Count; i++)
@@ -175,28 +182,25 @@ public class NotesManager : MonoBehaviour
                 notesList[i].failureFlag = true;
             }
             notesList.Clear();
-            delayTime = 1.5f;
-            delayFlag = true;
+            resetDelayFlag = true;
         }
         else
         {
-            if (delayTimer > delayTime)
+            if (resetDelayTimer > resetDelayTime)
             {
                 if (gamepad != null) gamepad.SetMotorSpeeds(0f, 0f);
                 correctAnswerRate = 0;
                 notesCount = 0; 
                 setUpNotesFlag = true;
                 resetNotesFlag = false;
-                delayTime = 0.15f;
-                delayTimer = 0f;
-                delayFlag = false;
+                resetDelayTimer = 0f;
+                resetDelayFlag = false;
             }
             else
             {
-                delayTimer += Time.deltaTime;
-                float amount = Mathf.Lerp(currentAmount, 1f, delayTimer / delayTime);
+                resetDelayTimer += Time.deltaTime;
+                float amount = Mathf.Lerp(currentAmount, 1f, resetDelayTimer / resetDelayTime);
                 countDownImage.fillAmount = amount;
-
             }
         }
     }
@@ -243,7 +247,7 @@ public class NotesManager : MonoBehaviour
                 else
                 {
                     addNotesFlag = true;
-                    delayFlag = true;
+                    addDelayFlag = true;
                 }
                 notesList.RemoveAt(0);
             }
@@ -253,7 +257,7 @@ public class NotesManager : MonoBehaviour
                 score -= 50;
                 correctAnswerRate = 0;
                 notesCount = 0;
-                resetNotesFlag = true;               
+                resetNotesFlag = true;
             }
             countDownTimer = 0;
             commandFlag = false;
@@ -274,225 +278,192 @@ public class NotesManager : MonoBehaviour
         commandFlag = true;
     }
 
-    public void OnA(InputValue value)
-    {
-        if (value.isPressed && inputAllowedFlag)
-        {
-            selectCommand = 0;
-            commandFlag = true;
-        }
-    }
-    public void OnB(InputValue value)
-    {
-        if (value.isPressed && inputAllowedFlag)
-        {
-            selectCommand = 3;
-            commandFlag = true;
-        }
-    }
-    public void OnX(InputValue value)
-    {
-        if (value.isPressed && inputAllowedFlag)
-        {
-            selectCommand = 2;
-            commandFlag = true;
-        }
-    }
-    public void OnY(InputValue value)
-    {
-        if (value.isPressed && inputAllowedFlag)
-        {
-            selectCommand = 1;
-            commandFlag = true;
-        }
-    }
+    //public void ButtonA(InputAction.CallbackContext context)
+    //{
+    //    if (gamepad == null)
+    //    {
+    //        if (context.started && inputAllowedFlag)
+    //        {
+    //            if (playerNumber == 0)
+    //            {
+    //                if (context.control.path == "/Keyboard/d")
+    //                {
+    //                    selectCommand = 0;
+    //                    commandFlag = true;
+    //                }
+    //            }
+    //            else if (playerNumber == 1)
+    //            {
+    //                if (context.control.path == "/Keyboard/rightArrow")
+    //                {
+    //                    selectCommand = 0;
+    //                    commandFlag = true;
+    //                }
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        if (context.started && inputAllowedFlag)
+    //        {
+    //            selectCommand = 0;
+    //            commandFlag = true;
+    //        }
+    //    }
+    //}
+    //public void ButtonB(InputAction.CallbackContext context)
+    //{
+    //    if (gamepad == null)
+    //    {
+    //        if (context.started && inputAllowedFlag)
+    //        {
+    //            if (playerNumber == 0)
+    //            {
+    //                if (context.control.path == "/Keyboard/s")
+    //                {
+    //                    selectCommand = 3;
+    //                    commandFlag = true;
+    //                }
+    //            }
+    //            else if (playerNumber == 1)
+    //            {
+    //                if (context.control.path == "/Keyboard/downArrow")
+    //                {
+    //                    selectCommand = 3;
+    //                    commandFlag = true;
+    //                }
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        if (context.started && inputAllowedFlag)
+    //        {
+    //            selectCommand = 3;
+    //            commandFlag = true;
+    //        }
+    //    }
+    //}
+    //public void ButtonX(InputAction.CallbackContext context)
+    //{
+    //    if (!GameManager.Instance.startFlag && !GameManager.Instance.gameFlag)
+    //    {
+    //        if (context.started)
+    //        {
+    //            if (playerNumber == 0)
+    //            {
+    //                if (context.control.path == "/Keyboard/w")
+    //                {
+    //                    GameManager.Instance.readyFlags[playerNumber] = true;
+    //                }
+    //                else if (context.control.path == "/XInputControllerWindows/buttonNorth")
+    //                {
+    //                    GameManager.Instance.readyFlags[playerNumber] = true;
+    //                }
+    //            }
+    //            else if (playerNumber == 1)
+    //            {
+    //                if (context.control.path == "/Keyboard/upArrow")
+    //                {
+    //                    GameManager.Instance.readyFlags[playerNumber] = true;
+    //                }
+    //                else if (context.control.path == "/XInputControllerWindows/buttonNorth")
+    //                {
+    //                    GameManager.Instance.readyFlags[playerNumber] = true;
+    //                }
+    //            }
+    //        }
+    //        else if (context.canceled)
+    //        {
 
-    public void ButtonA(InputAction.CallbackContext context)
-    {
-        if (gamepad == null)
-        {
-            if (context.started && inputAllowedFlag)
-            {
-                if (playerNumber == 0)
-                {
-                    if (context.control.path == "/Keyboard/d")
-                    {
-                        selectCommand = 0;
-                        commandFlag = true;
-                    }
-                }
-                else if (playerNumber == 1)
-                {
-                    if (context.control.path == "/Keyboard/rightArrow")
-                    {
-                        selectCommand = 0;
-                        commandFlag = true;
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (context.started && inputAllowedFlag)
-            {
-                selectCommand = 0;
-                commandFlag = true;
-            }
-        }
-    }
-    public void ButtonB(InputAction.CallbackContext context)
-    {
-        if (gamepad == null)
-        {
-            if (context.started && inputAllowedFlag)
-            {
-                if (playerNumber == 0)
-                {
-                    if (context.control.path == "/Keyboard/s")
-                    {
-                        selectCommand = 3;
-                        commandFlag = true;
-                    }
-                }
-                else if (playerNumber == 1)
-                {
-                    if (context.control.path == "/Keyboard/downArrow")
-                    {
-                        selectCommand = 3;
-                        commandFlag = true;
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (context.started && inputAllowedFlag)
-            {
-                selectCommand = 3;
-                commandFlag = true;
-            }
-        }
-    }
-    public void ButtonX(InputAction.CallbackContext context)
-    {
-        if (!GameManager.Instance.startFlag && !GameManager.Instance.gameFlag)
-        {
-            if (context.started)
-            {
-                if (playerNumber == 0)
-                {
-                    if (context.control.path == "/Keyboard/w")
-                    {
-                        GameManager.Instance.readyFlags[playerNumber] = true;
-                    }
-                    else if (context.control.path == "/XInputControllerWindows/buttonNorth")
-                    {
-                        GameManager.Instance.readyFlags[playerNumber] = true;
-                    }
-                }
-                else if (playerNumber == 1)
-                {
-                    if (context.control.path == "/Keyboard/upArrow")
-                    {
-                        GameManager.Instance.readyFlags[playerNumber] = true;
-                    }
-                    else if (context.control.path == "/XInputControllerWindows/buttonNorth")
-                    {
-                        GameManager.Instance.readyFlags[playerNumber] = true;
-                    }
-                }
-            }
-            else if (context.canceled)
-            {
+    //            if (playerNumber == 0)
+    //            {
+    //                if (context.control.path == "/Keyboard/w")
+    //                {
+    //                    GameManager.Instance.readyFlags[playerNumber] = false;
+    //                }
+    //                else if (context.control.path == "/XInputControllerWindows/buttonNorth")
+    //                {
+    //                    GameManager.Instance.readyFlags[playerNumber] = false;
+    //                    Debug.Log($"{gameObject.name}");
+    //                }
+    //            }
+    //            else if (playerNumber == 1)
+    //            {
+    //                if (context.control.path == "/Keyboard/upArrow")
+    //                {
+    //                    GameManager.Instance.readyFlags[playerNumber] = false;
+    //                }
+    //                else if (context.control.path == "/XInputControllerWindows/buttonNorth")
+    //                {
+    //                    GameManager.Instance.readyFlags[playerNumber] = false;
+    //                }
+    //            }
 
-                if (playerNumber == 0)
-                {
-                    if (context.control.path == "/Keyboard/w")
-                    {
-                        GameManager.Instance.readyFlags[playerNumber] = false;
-                    }
-                    else if (context.control.path == "/XInputControllerWindows/buttonNorth")
-                    {
-                        GameManager.Instance.readyFlags[playerNumber] = false;
-                        Debug.Log($"{gameObject.name}");
-                    }
-                }
-                else if (playerNumber == 1)
-                {
-                    if (context.control.path == "/Keyboard/upArrow")
-                    {
-                        GameManager.Instance.readyFlags[playerNumber] = false;
-                    }
-                    else if (context.control.path == "/XInputControllerWindows/buttonNorth")
-                    {
-                        GameManager.Instance.readyFlags[playerNumber] = false;
-                    }
-                }
-
-            }            
-        }
-        if (gamepad == null)
-        {
-            if (context.started && inputAllowedFlag)
-            {
-                if (playerNumber == 0)
-                {
-                    if (context.control.path == "/Keyboard/w")
-                    {
-                        selectCommand = 2;
-                        commandFlag = true;
-                    }
-                }
-                else if (playerNumber == 1)
-                {
-                    if (context.control.path == "/Keyboard/upArrow")
-                    {
-                        selectCommand = 2;
-                        commandFlag = true;
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (context.started && inputAllowedFlag)
-            {
-                selectCommand = 2;
-                commandFlag = true;
-            }
-        }
-    }
-    public void ButtonY(InputAction.CallbackContext context)
-    {
-        if (gamepad == null)
-        {
-            if (context.started && inputAllowedFlag)
-            {
-                if (playerNumber == 0)
-                {
-                    if (context.control.path == "/Keyboard/a")
-                    {
-                        selectCommand = 1;
-                        commandFlag = true;
-                    }
-                }
-                else if (playerNumber == 1)
-                {
-                    if (context.control.path == "/Keyboard/leftArrow")
-                    {
-                        selectCommand = 1;
-                        commandFlag = true;
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (context.started && inputAllowedFlag)
-            {
-                selectCommand = 1;
-                commandFlag = true;
-            }
-        }
-    }
+    //        }            
+    //    }
+    //    if (gamepad == null)
+    //    {
+    //        if (context.started && inputAllowedFlag)
+    //        {
+    //            if (playerNumber == 0)
+    //            {
+    //                if (context.control.path == "/Keyboard/w")
+    //                {
+    //                    selectCommand = 2;
+    //                    commandFlag = true;
+    //                }
+    //            }
+    //            else if (playerNumber == 1)
+    //            {
+    //                if (context.control.path == "/Keyboard/upArrow")
+    //                {
+    //                    selectCommand = 2;
+    //                    commandFlag = true;
+    //                }
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        if (context.started && inputAllowedFlag)
+    //        {
+    //            selectCommand = 2;
+    //            commandFlag = true;
+    //        }
+    //    }
+    //}
+    //public void ButtonY(InputAction.CallbackContext context)
+    //{
+    //    if (gamepad == null)
+    //    {
+    //        if (context.started && inputAllowedFlag)
+    //        {
+    //            if (playerNumber == 0)
+    //            {
+    //                if (context.control.path == "/Keyboard/a")
+    //                {
+    //                    selectCommand = 1;
+    //                    commandFlag = true;
+    //                }
+    //            }
+    //            else if (playerNumber == 1)
+    //            {
+    //                if (context.control.path == "/Keyboard/leftArrow")
+    //                {
+    //                    selectCommand = 1;
+    //                    commandFlag = true;
+    //                }
+    //            }
+    //        }
+    //    }
+    //    else
+    //    {
+    //        if (context.started && inputAllowedFlag)
+    //        {
+    //            selectCommand = 1;
+    //            commandFlag = true;
+    //        }
+    //    }
+    //}
 }
