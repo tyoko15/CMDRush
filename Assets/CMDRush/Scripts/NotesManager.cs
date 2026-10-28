@@ -77,11 +77,11 @@ public class NotesManager : MonoBehaviour
         positions = new Vector3[5];
         for (int i = 0; i < positions.Length; i++) positions[i] = transform.GetChild(0).GetChild(i).position;
         notesList = new List<Notes>();
-        countDownImage = playerUI.transform.GetChild(1).GetChild(1).GetComponent<Image>();
+        countDownImage = playerUI.transform.GetChild(4).GetChild(1).GetComponent<Image>();
         countDownImage.fillAmount = 0;
-        roundText = playerUI.transform.GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>();
-        scoreText = playerUI.transform.GetChild(0).GetChild(2).GetComponent<TextMeshProUGUI>();
-        correctAnswerRateText = playerUI.transform.GetChild(0).GetChild(3).GetComponent<TextMeshProUGUI>();
+        roundText = playerUI.transform.GetChild(5).GetChild(1).GetComponent<TextMeshProUGUI>();
+        scoreText = playerUI.transform.GetChild(5).GetChild(2).GetComponent<TextMeshProUGUI>();
+        correctAnswerRateText = playerUI.transform.GetChild(5).GetChild(3).GetComponent<TextMeshProUGUI>();
     }
 
     void InstantiateNotes()

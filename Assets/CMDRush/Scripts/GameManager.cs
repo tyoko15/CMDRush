@@ -36,14 +36,14 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
         Init(); 
-        SetUpController();
-        //readyFlags[0] = true;
-        //readyFlags[1] = true;
+        //SetUpController();
+        readyFlags[0] = true;
+        readyFlags[1] = true;
     }
 
     void Update()
     {
-        if (!gameFlag) SetUpController();
+        //if (!gameFlag) SetUpController();
         NotesManagerSetUp();
         GameStart();
         if (readyFlags[0] && readyFlags[1])
@@ -64,13 +64,13 @@ public class GameManager : MonoBehaviour
 
     void Init()
     {
-        inputTexts[0] = titlePlayerUIs[0].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-        inputTexts[1] = titlePlayerUIs[1].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-        instructionTexts[0] = titlePlayerUIs[0].transform.GetChild(2).GetComponent<TextMeshProUGUI>();
-        instructionTexts[1] = titlePlayerUIs[1].transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        //inputTexts[0] = titlePlayerUIs[0].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        //inputTexts[1] = titlePlayerUIs[1].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        //instructionTexts[0] = titlePlayerUIs[0].transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        //instructionTexts[1] = titlePlayerUIs[1].transform.GetChild(2).GetComponent<TextMeshProUGUI>();
 
         startCountDownText = gameUI.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        gameTimerText = gameUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        gameTimerText = gameUI.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
         gameTimerText.text = $"01:00";
     }
 
@@ -182,7 +182,7 @@ public class GameManager : MonoBehaviour
             {
                 if (startTimer == 0f)
                 {
-                    titleUI.SetActive(false);
+                    //titleUI.SetActive(false);
                     startCountDownText.gameObject.SetActive(true);
                 }
                 startTimer += Time.deltaTime;
