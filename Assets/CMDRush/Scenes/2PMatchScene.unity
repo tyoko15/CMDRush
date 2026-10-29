@@ -627,7 +627,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &58354881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2177,11 +2177,12 @@ MonoBehaviour:
   playerInputs:
   - {fileID: 0}
   - {fileID: 0}
-  titleUI: {fileID: 0}
+  titleUI: {fileID: 2080494762}
   titlePlayerUIs:
   - {fileID: 0}
   - {fileID: 0}
   gameUI: {fileID: 1949104759}
+  resultUI: {fileID: 2080494762}
   startFlag: 0
   readyFlags: 0000
   readyTime: 0.5
@@ -5163,6 +5164,11 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   playerUI: {fileID: 1351168248}
+  score: 0
+  notesCount: 0
+  roundCount: 0
+  correctCount: 0
+  missCount: 0
   totalCorrectAnswer: 5
   addQuestion: 5
   delayTime: 0.15
@@ -8443,6 +8449,11 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   playerUI: {fileID: 1511557400}
+  score: 0
+  notesCount: 0
+  roundCount: 0
+  correctCount: 0
+  missCount: 0
   totalCorrectAnswer: 5
   addQuestion: 5
   delayTime: 0.15

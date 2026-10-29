@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Users;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,6 +18,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject gameUI;
     TextMeshProUGUI startCountDownText;
     TextMeshProUGUI gameTimerText;
+
+    [SerializeField] GameObject resultUI;
+    TextMeshProUGUI[] resultRoundsTexts = new TextMeshProUGUI[2];
+    TextMeshProUGUI[] resultCorrectTexts = new TextMeshProUGUI[2];
+    TextMeshProUGUI[] resultMissesTexts = new TextMeshProUGUI[2];
+    TextMeshProUGUI[] resultScoreTexts = new TextMeshProUGUI[2];
 
     public bool startFlag;
     public bool[] readyFlags = new bool[2];
@@ -53,13 +59,19 @@ public class GameManager : MonoBehaviour
                 readyTimer = 0f;
                 readyFlags[0] = false;
                 readyFlags[1] = false;
-            startFlag = true;
-
+                startFlag = true;
             }
             else readyTimer += Time.deltaTime;
         }
 
         if (gameFlag) GameTime();
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SceneManager.LoadScene("2PMatchScene");
+            }
+        }
     }
 
     void Init()
@@ -68,6 +80,14 @@ public class GameManager : MonoBehaviour
         //inputTexts[1] = titlePlayerUIs[1].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         //instructionTexts[0] = titlePlayerUIs[0].transform.GetChild(2).GetComponent<TextMeshProUGUI>();
         //instructionTexts[1] = titlePlayerUIs[1].transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        resultRoundsTexts[0] = resultUI.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>();
+        resultRoundsTexts[1] = resultUI.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>();
+        resultCorrectTexts[0] = resultUI.transform.GetChild(0).GetChild(0).GetChild(2).GetComponent<TextMeshProUGUI>();
+        resultCorrectTexts[1] = resultUI.transform.GetChild(0).GetChild(1).GetChild(2).GetComponent<TextMeshProUGUI>();
+        resultMissesTexts[0] = resultUI.transform.GetChild(0).GetChild(0).GetChild(3).GetComponent<TextMeshProUGUI>();
+        resultMissesTexts[1] = resultUI.transform.GetChild(0).GetChild(1).GetChild(3).GetComponent<TextMeshProUGUI>();
+        resultScoreTexts[0] = resultUI.transform.GetChild(0).GetChild(0).GetChild(4).GetComponent<TextMeshProUGUI>();
+        resultScoreTexts[1] = resultUI.transform.GetChild(0).GetChild(1).GetChild(4).GetComponent<TextMeshProUGUI>();   
 
         startCountDownText = gameUI.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         gameTimerText = gameUI.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
@@ -201,6 +221,9 @@ public class GameManager : MonoBehaviour
             gameMinute = 0;
             gameTimer = 0f;
             gameFlag = false;
+            notesManagers[0].ControllerStop();
+            notesManagers[1].ControllerStop();
+            Result();
         }
         else
         {
@@ -212,8 +235,21 @@ public class GameManager : MonoBehaviour
             }
             float s = 60f - gameTimer;
             if (s > 59f) s = 59f;
-            int m = 2 - gameMinute;
-            gameTimerText.text = $"{m.ToString("00")}:{s.ToString("00")}";
+            int m = (int)gameLimitMinute - gameMinute;
+            gameTimerText.text = $"{0}:{s.ToString("00")}";
         }
+    }
+
+    void Result()
+    {
+        resultUI.SetActive(true);
+        resultRoundsTexts[0].text = $"{notesManagers[0].roundCount}";
+        resultRoundsTexts[1].text = $"{notesManagers[1].roundCount}";
+        resultCorrectTexts[0].text = $"{notesManagers[0].correctCount}";
+        resultCorrectTexts[1].text = $"{notesManagers[1].correctCount}";
+        resultMissesTexts[0].text = $"{notesManagers[0].missCount}";
+        resultMissesTexts[1].text = $"{notesManagers[1].missCount}";
+        resultScoreTexts[0].text = $"{notesManagers[0].score}";
+        resultScoreTexts[1].text = $"{notesManagers[1].score}";
     }
 }

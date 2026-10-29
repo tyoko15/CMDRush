@@ -18,9 +18,11 @@ public class NotesManager : MonoBehaviour
     TextMeshProUGUI scoreText;
     TextMeshProUGUI correctAnswerRateText;
 
-    int score;
-    int notesCount;
-    int roundCount;
+    public int score;
+    public int notesCount;
+    public int roundCount;
+    public int correctCount;
+    public int missCount;
     int correctAnswerRate;
     [SerializeField] int totalCorrectAnswer;
     [SerializeField] int addQuestion;
@@ -100,6 +102,11 @@ public class NotesManager : MonoBehaviour
         notesCount++;
     }
 
+    public void ControllerStop()
+    {
+        if (gamepad != null) gamepad.SetMotorSpeeds(0f, 0f);
+    }
+
     void SetUpNotes()
     {
         if (!delayFlag)
@@ -176,7 +183,7 @@ public class NotesManager : MonoBehaviour
     {
         if (!resetDelayFlag)
         {
-            if (gamepad != null) gamepad.SetMotorSpeeds(0.1f, 0.1f);
+            if (gamepad != null) gamepad.SetMotorSpeeds(1f, 0f);
             for (int i = 0; i < notesList.Count; i++)
             {
                 notesList[i].failureFlag = true;
@@ -243,6 +250,7 @@ public class NotesManager : MonoBehaviour
                 notesList[0].successFlag = true;
                 score += 100;
                 correctAnswerRate++;
+                correctCount++;
                 if (totalCorrectAnswer == correctAnswerRate) RoundUp();
                 else
                 {
@@ -256,6 +264,7 @@ public class NotesManager : MonoBehaviour
                 currentAmount = countDownImage.fillAmount;
                 score -= 50;
                 correctAnswerRate = 0;
+                missCount++;
                 notesCount = 0;
                 resetNotesFlag = true;
             }
