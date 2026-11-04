@@ -545,6 +545,17 @@
                 },
                 {
                     "name": "",
+                    "id": "04ca0631-334c-46f4-85fd-5f0fea50d162",
+                    "path": "<Gamepad>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "A",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "69dcdf25-b3de-47a2-9878-9f4b7071470e",
                     "path": "<Keyboard>/s",
                     "interactions": "",
@@ -572,6 +583,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
+                    "action": "B",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f16590b7-29c7-431d-9935-5ba8a11b2691",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "B",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -611,6 +633,17 @@
                 },
                 {
                     "name": "",
+                    "id": "d4a12b8c-945a-4de5-a852-1af519c2b827",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "X",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "e4a7f4ce-6ffe-4b39-a351-edc2ae9a9061",
                     "path": "<Keyboard>/a",
                     "interactions": "",
@@ -638,6 +671,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
+                    "action": "Y",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f6959675-1a9b-4340-992e-3ffad636c2b7",
+                    "path": "<Gamepad>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
                     "action": "Y",
                     "isComposite": false,
                     "isPartOfComposite": false

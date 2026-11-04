@@ -1,12 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using UnityEngine;
-using TMPro;
 
 public class NotesManager : MonoBehaviour
 {
     public int playerNumber;
+    public ControllerKind controllerKind;
     public Gamepad gamepad;
     [SerializeField] GameObject notesPrefab;
     [SerializeField] Sprite[] notesSprites;
@@ -27,11 +29,16 @@ public class NotesManager : MonoBehaviour
     [SerializeField] int totalCorrectAnswer;
     [SerializeField] int addQuestion;
 
+    public bool setUpPracticeNotesFlag;
+    int setUpPracticeNotesCount;
+    [SerializeField] float setUpPracticeNotesDelayTime;
+    float setUpPracticeNotesDelayTimer;
+
     bool setUpNotesFlag;
     int notesSetUpCount;
-    bool delayFlag;
-    [SerializeField] float delayTime;
-    float delayTimer;
+    bool setupDelayFlag;
+    [SerializeField] float setUpDelayTime;
+    float setUpDelayTimer;
 
     bool addNotesFlag;
     bool addDelayFlag;
@@ -42,6 +49,9 @@ public class NotesManager : MonoBehaviour
     bool resetDelayFlag;
     [SerializeField] float resetDelayTime;
     float resetDelayTimer;
+
+    bool practiceCommandFlag;
+    int practiceNotesCount;
 
     public bool inputAllowedFlag;
     bool commandFlag;
@@ -54,8 +64,11 @@ public class NotesManager : MonoBehaviour
 
     void Start()
     {
+
         Init();
-        setUpNotesFlag = true;
+        StartPracticeNotesSetUp();
+        setUpPracticeNotesFlag = true;
+        //setUpNotesFlag = true;
 
         roundCount++;
     }
@@ -63,8 +76,10 @@ public class NotesManager : MonoBehaviour
     void Update()
     {
         UpdateUI();
-        if (setUpNotesFlag) SetUpNotes();
-        if (GameManager.Instance.gameFlag)
+        if (setUpPracticeNotesFlag) SetupPracticeNotes();
+        //if (setUpNotesFlag) SetUpNotes();
+        if (setUpPracticeNotesFlag) CommandControl();
+        if (TwoPMatchGameManager.Instance.gameFlag)
         {
             CommandControl();
             if (addNotesFlag) AddNotes();
@@ -81,9 +96,25 @@ public class NotesManager : MonoBehaviour
         notesList = new List<Notes>();
         countDownImage = playerUI.transform.GetChild(4).GetChild(1).GetComponent<Image>();
         countDownImage.fillAmount = 0;
-        roundText = playerUI.transform.GetChild(5).GetChild(1).GetComponent<TextMeshProUGUI>();
-        scoreText = playerUI.transform.GetChild(5).GetChild(2).GetComponent<TextMeshProUGUI>();
-        correctAnswerRateText = playerUI.transform.GetChild(5).GetChild(3).GetComponent<TextMeshProUGUI>();
+        roundText = playerUI.transform.GetChild(5).GetChild(3).GetComponent<TextMeshProUGUI>();
+        scoreText = playerUI.transform.GetChild(5).GetChild(4).GetComponent<TextMeshProUGUI>();
+        correctAnswerRateText = playerUI.transform.GetChild(5).GetChild(5).GetComponent<TextMeshProUGUI>();
+    }
+
+    void InstantiateDesignationNotes(int i)
+    {
+        GameObject n = Instantiate(notesPrefab, Vector2.zero, Quaternion.identity);
+        NotesData d = new NotesData();
+        d.number = 0;
+        d.type = (NotesType)i;
+        n.GetComponent<Notes>().notesManager = this;
+        n.GetComponent<Notes>().data = d;
+        n.GetComponent<SpriteRenderer>().sprite = notesSprites[(int)d.type + (int)controllerKind * 4];
+        n.transform.SetParent(transform, true);
+        n.transform.position = positions[0];
+        n.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
+        notesList.Add(n.GetComponent<Notes>());
+        notesCount++;
     }
 
     void InstantiateNotes()
@@ -94,7 +125,7 @@ public class NotesManager : MonoBehaviour
         d.type = (NotesType)Random.Range(0, 4);
         n.GetComponent<Notes>().notesManager = this;
         n.GetComponent<Notes>().data = d;
-        n.GetComponent<SpriteRenderer>().sprite = notesSprites[(int)d.type];
+        n.GetComponent<SpriteRenderer>().sprite = notesSprites[(int)d.type + (int)controllerKind * 4];
         n.transform.SetParent(transform, true);
         n.transform.position = positions[0];
         n.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
@@ -107,16 +138,115 @@ public class NotesManager : MonoBehaviour
         if (gamepad != null) gamepad.SetMotorSpeeds(0f, 0f);
     }
 
-    void SetUpNotes()
+    public void SetupPracticeNotes()
     {
-        if (!delayFlag)
+        if (!setUpPracticeNotesFlag)
         {
-            InstantiateNotes();
-            delayFlag = true;
+            InstantiateDesignationNotes(setUpPracticeNotesCount);
+            setUpPracticeNotesFlag = true;
         }
         else
         {
-            if (delayTimer > delayTime)
+            if (setUpPracticeNotesDelayTimer > setUpPracticeNotesDelayTime)
+            {
+                if (setUpPracticeNotesCount != 3)
+                {
+                    for (int i = 0; i < notesList.Count; i++)
+                    {
+                        notesList[i].CalculationX();
+                        notesList[i].moveFlag = true;
+                        notesList[i].data.number++;
+                    }
+                }
+            }
+        }
+    }
+
+
+    public void StartPracticeNotesSetUp()
+    {
+        StartCoroutine(SetUpPracticeNotesCoroutine());
+    }
+
+    public void StartNotesSetup()
+    {
+        StartCoroutine(SetUpNotesCoroutine());        
+    }
+
+    private IEnumerator SetUpPracticeNotesCoroutine()
+    {
+        for (int setUpPracticeNotesCount = 0; setUpPracticeNotesCount < 4; setUpPracticeNotesCount++)
+        {
+            InstantiateDesignationNotes(setUpPracticeNotesCount);
+
+            float timer = 0f;
+            while (timer < setUpPracticeNotesDelayTime)
+            {
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            if (setUpPracticeNotesCount != 4)
+            {
+                for (int i = 0; i < notesList.Count; i++)
+                {
+                    notesList[i].CalculationX();
+                    notesList[i].moveFlag = true;
+                    notesList[i].data.number++;
+                }
+            }
+        }
+
+        //setUpPracticeNotesFlag = false;
+    }
+
+    private IEnumerator SetUpNotesCoroutine()
+    {
+        for (int notesSetUpCount = 0; notesSetUpCount < 5; notesSetUpCount++)
+        {
+            InstantiateNotes();
+
+            float timer = 0f;
+            while (timer < setUpDelayTime)
+            {
+                timer += Time.deltaTime;
+
+                float amount = Mathf.Lerp(
+                    notesSetUpCount * 0.2f,
+                    (notesSetUpCount * 0.2f) + 0.2f,
+                    timer / setUpDelayTime
+                );
+                countDownImage.fillAmount = amount;
+
+                yield return null;
+            }
+
+            if (notesSetUpCount != 4)
+            {
+                for (int i = 0; i < notesList.Count; i++)
+                {
+                    notesList[i].CalculationX();
+                    notesList[i].moveFlag = true;
+                    notesList[i].data.number++;
+                }
+            }
+        }
+
+        TwoPMatchGameManager.Instance.setupFlag = true;
+        setUpNotesFlag = false;
+    }
+
+
+    void SetUpNotes()
+    {
+        if (!setupDelayFlag)
+        {
+            InstantiateNotes();
+            setupDelayFlag = true;
+        }
+        else
+        {
+            if (setUpDelayTimer > setUpDelayTime)
             {
                 if (notesSetUpCount != 4)
                 {
@@ -130,18 +260,18 @@ public class NotesManager : MonoBehaviour
                 notesSetUpCount++;
                 if (notesSetUpCount == 5)
                 {
-                    GameManager.Instance.setupFlag = true;
+                    TwoPMatchGameManager.Instance.setupFlag = true;
                     notesSetUpCount = 0;
                     setUpNotesFlag = false;
                 }
-                delayTimer = 0f;
-                delayFlag = false;
+                setUpDelayTimer = 0f;
+                setupDelayFlag = false;
             }
             else
             {
-                delayTimer += Time.deltaTime;
+                setUpDelayTimer += Time.deltaTime;
 
-                float amount = Mathf.Lerp(notesSetUpCount * 0.2f, (notesSetUpCount * 0.2f) + 0.2f, delayTimer / delayTime);
+                float amount = Mathf.Lerp(notesSetUpCount * 0.2f, (notesSetUpCount * 0.2f) + 0.2f, setUpDelayTimer / setUpDelayTime);
                 countDownImage.fillAmount = amount;
             }
         }
@@ -183,7 +313,7 @@ public class NotesManager : MonoBehaviour
     {
         if (!resetDelayFlag)
         {
-            if (gamepad != null) gamepad.SetMotorSpeeds(1f, 0f);
+            if (gamepad != null) gamepad.SetMotorSpeeds(1f, 1f);
             for (int i = 0; i < notesList.Count; i++)
             {
                 notesList[i].failureFlag = true;
@@ -197,7 +327,8 @@ public class NotesManager : MonoBehaviour
             {
                 if (gamepad != null) gamepad.SetMotorSpeeds(0f, 0f);
                 correctAnswerRate = 0;
-                notesCount = 0; 
+                notesCount = 0;
+                StartNotesSetup();
                 setUpNotesFlag = true;
                 resetNotesFlag = false;
                 resetDelayTimer = 0f;
@@ -236,13 +367,14 @@ public class NotesManager : MonoBehaviour
         score += 1000;
         correctAnswerRate = 0;
         notesCount = 0;
+        StartNotesSetup();
         setUpNotesFlag = true;
     }
 
     void CommandControl()
     {
         if (commandFlag)
-        {
+        {           
             if (notesList.Count == 0) return;
             if ((int)notesList[0].data.type == selectCommand)
             {
@@ -272,6 +404,34 @@ public class NotesManager : MonoBehaviour
             commandFlag = false;
             inputAllowedFlag = false;
         }
+        else if (practiceCommandFlag)
+        {
+            if (notesList.Count == 0) return;
+            if ((int)notesList[0].data.type == selectCommand)
+            {
+                notesList[0].successFlag = true;
+                for (int i = 0; i < notesList.Count; i++)
+                {
+                    notesList[i].CalculationX();
+                    notesList[i].moveFlag = true;
+                    notesList[i].data.number++;
+                }
+                notesList.RemoveAt(0);
+
+                if (notesList.Count == 0)
+                {
+                    notesCount = 0;
+                    TwoPMatchGameManager.Instance.readyFlags[playerNumber] = true;
+                    setUpPracticeNotesFlag = false;
+                }
+            }
+            else
+            {
+                notesList[0].practiceFailureFlag = true;
+
+            }
+            practiceCommandFlag = false;
+        }
     }
 
     void UpdateUI()
@@ -281,198 +441,20 @@ public class NotesManager : MonoBehaviour
         correctAnswerRateText.text = $"{correctAnswerRate.ToString("00")} / {totalCorrectAnswer.ToString("00")}";
     }
 
+    public void PracticeSelectCommand(int i)
+    {
+        selectCommand = i;
+        practiceCommandFlag = true;
+    }
+
     public void SetSelectCommand(int i)
     {
         selectCommand = i;
         commandFlag = true;
     }
 
-    //public void ButtonA(InputAction.CallbackContext context)
-    //{
-    //    if (gamepad == null)
-    //    {
-    //        if (context.started && inputAllowedFlag)
-    //        {
-    //            if (playerNumber == 0)
-    //            {
-    //                if (context.control.path == "/Keyboard/d")
-    //                {
-    //                    selectCommand = 0;
-    //                    commandFlag = true;
-    //                }
-    //            }
-    //            else if (playerNumber == 1)
-    //            {
-    //                if (context.control.path == "/Keyboard/rightArrow")
-    //                {
-    //                    selectCommand = 0;
-    //                    commandFlag = true;
-    //                }
-    //            }
-    //        }
-    //    }
-    //    else
-    //    {
-    //        if (context.started && inputAllowedFlag)
-    //        {
-    //            selectCommand = 0;
-    //            commandFlag = true;
-    //        }
-    //    }
-    //}
-    //public void ButtonB(InputAction.CallbackContext context)
-    //{
-    //    if (gamepad == null)
-    //    {
-    //        if (context.started && inputAllowedFlag)
-    //        {
-    //            if (playerNumber == 0)
-    //            {
-    //                if (context.control.path == "/Keyboard/s")
-    //                {
-    //                    selectCommand = 3;
-    //                    commandFlag = true;
-    //                }
-    //            }
-    //            else if (playerNumber == 1)
-    //            {
-    //                if (context.control.path == "/Keyboard/downArrow")
-    //                {
-    //                    selectCommand = 3;
-    //                    commandFlag = true;
-    //                }
-    //            }
-    //        }
-    //    }
-    //    else
-    //    {
-    //        if (context.started && inputAllowedFlag)
-    //        {
-    //            selectCommand = 3;
-    //            commandFlag = true;
-    //        }
-    //    }
-    //}
-    //public void ButtonX(InputAction.CallbackContext context)
-    //{
-    //    if (!GameManager.Instance.startFlag && !GameManager.Instance.gameFlag)
-    //    {
-    //        if (context.started)
-    //        {
-    //            if (playerNumber == 0)
-    //            {
-    //                if (context.control.path == "/Keyboard/w")
-    //                {
-    //                    GameManager.Instance.readyFlags[playerNumber] = true;
-    //                }
-    //                else if (context.control.path == "/XInputControllerWindows/buttonNorth")
-    //                {
-    //                    GameManager.Instance.readyFlags[playerNumber] = true;
-    //                }
-    //            }
-    //            else if (playerNumber == 1)
-    //            {
-    //                if (context.control.path == "/Keyboard/upArrow")
-    //                {
-    //                    GameManager.Instance.readyFlags[playerNumber] = true;
-    //                }
-    //                else if (context.control.path == "/XInputControllerWindows/buttonNorth")
-    //                {
-    //                    GameManager.Instance.readyFlags[playerNumber] = true;
-    //                }
-    //            }
-    //        }
-    //        else if (context.canceled)
-    //        {
-
-    //            if (playerNumber == 0)
-    //            {
-    //                if (context.control.path == "/Keyboard/w")
-    //                {
-    //                    GameManager.Instance.readyFlags[playerNumber] = false;
-    //                }
-    //                else if (context.control.path == "/XInputControllerWindows/buttonNorth")
-    //                {
-    //                    GameManager.Instance.readyFlags[playerNumber] = false;
-    //                    Debug.Log($"{gameObject.name}");
-    //                }
-    //            }
-    //            else if (playerNumber == 1)
-    //            {
-    //                if (context.control.path == "/Keyboard/upArrow")
-    //                {
-    //                    GameManager.Instance.readyFlags[playerNumber] = false;
-    //                }
-    //                else if (context.control.path == "/XInputControllerWindows/buttonNorth")
-    //                {
-    //                    GameManager.Instance.readyFlags[playerNumber] = false;
-    //                }
-    //            }
-
-    //        }            
-    //    }
-    //    if (gamepad == null)
-    //    {
-    //        if (context.started && inputAllowedFlag)
-    //        {
-    //            if (playerNumber == 0)
-    //            {
-    //                if (context.control.path == "/Keyboard/w")
-    //                {
-    //                    selectCommand = 2;
-    //                    commandFlag = true;
-    //                }
-    //            }
-    //            else if (playerNumber == 1)
-    //            {
-    //                if (context.control.path == "/Keyboard/upArrow")
-    //                {
-    //                    selectCommand = 2;
-    //                    commandFlag = true;
-    //                }
-    //            }
-    //        }
-    //    }
-    //    else
-    //    {
-    //        if (context.started && inputAllowedFlag)
-    //        {
-    //            selectCommand = 2;
-    //            commandFlag = true;
-    //        }
-    //    }
-    //}
-    //public void ButtonY(InputAction.CallbackContext context)
-    //{
-    //    if (gamepad == null)
-    //    {
-    //        if (context.started && inputAllowedFlag)
-    //        {
-    //            if (playerNumber == 0)
-    //            {
-    //                if (context.control.path == "/Keyboard/a")
-    //                {
-    //                    selectCommand = 1;
-    //                    commandFlag = true;
-    //                }
-    //            }
-    //            else if (playerNumber == 1)
-    //            {
-    //                if (context.control.path == "/Keyboard/leftArrow")
-    //                {
-    //                    selectCommand = 1;
-    //                    commandFlag = true;
-    //                }
-    //            }
-    //        }
-    //    }
-    //    else
-    //    {
-    //        if (context.started && inputAllowedFlag)
-    //        {
-    //            selectCommand = 1;
-    //            commandFlag = true;
-    //        }
-    //    }
-    //}
+    private void OnDisable()
+    {
+        if (gamepad != null) gamepad.SetMotorSpeeds(0f, 0f);
+    }
 }

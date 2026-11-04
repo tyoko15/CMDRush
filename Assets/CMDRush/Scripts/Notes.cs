@@ -33,6 +33,13 @@ public class Notes : MonoBehaviour
     public bool successFlag;
     [SerializeField] float successTime;
     float successTimer;
+    public bool practiceFailureFlag;
+    [SerializeField] float practiceFailureTime;
+    float practiceFailureTimer;
+    [Header("k‚¦‚ÌÝ’è")]
+    [SerializeField] private float shakeAmount = 0.05f;
+    private Vector3 initialPosition;
+
     public bool failureFlag;
     
 
@@ -48,6 +55,7 @@ public class Notes : MonoBehaviour
         if (spawnFlag) Spawn();
         if (moveFlag) Move();
         if (successFlag) Success();
+        if (practiceFailureFlag) PracticeFailure();
         if (failureFlag) Failure();
     }
 
@@ -61,7 +69,7 @@ public class Notes : MonoBehaviour
         else
         {
             spawnTimer += Time.deltaTime;
-            float size = Mathf.Lerp(0f, 0.15f, spawnTimer / spawnTime);
+            float size = Mathf.Lerp(0f, 0.25f, spawnTimer / spawnTime);
             transform.localScale = new Vector2(size, size);
         }
     }
@@ -69,7 +77,7 @@ public class Notes : MonoBehaviour
     public void CalculationX()
     {
         currentX = notesManager.positions[data.number].x;
-        if (data.number + 1 > 4) Debug.Log($"over");
+        if (data.number + 1 > 4) return;
         else nextX = notesManager.positions[data.number + 1].x;                           
     }
 
@@ -101,13 +109,31 @@ public class Notes : MonoBehaviour
         {
             successTimer += Time.deltaTime;
             float a = Mathf.Lerp(1f, 0f, successTimer / successTime);
-            float s = Mathf.Lerp(0.15f, 0.35f, successTimer / successTime);
+            float s = Mathf.Lerp(0.15f, 0.4f, successTimer / successTime);
             Color color = transform.GetComponent<SpriteRenderer>().color;
             color.a = a;
             transform.GetComponent<SpriteRenderer>().color = color;
             transform.localScale = new Vector3(s, s, s);
         }
 
+    }
+
+    void PracticeFailure()
+    {
+        if (practiceFailureTimer > practiceFailureTime)
+        {
+            transform.localPosition = initialPosition;
+
+            practiceFailureTimer = 0f;
+            practiceFailureFlag = false;
+        }
+        else
+        {
+            if (practiceFailureTimer == 0f) initialPosition = transform.localPosition;
+            practiceFailureTimer += Time.deltaTime;
+            Vector2 randomOffset = Random.insideUnitCircle * shakeAmount;
+            transform.localPosition = initialPosition + new Vector3(randomOffset.x, randomOffset.y, 0f);
+        }
     }
 
     void Failure()

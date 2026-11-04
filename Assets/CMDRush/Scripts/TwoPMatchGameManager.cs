@@ -3,17 +3,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class TwoPMatchGameManager : MonoBehaviour
 {
-    public static GameManager Instance;
+    public static TwoPMatchGameManager Instance;
 
     public NotesManager[] notesManagers = new NotesManager[2];
     public PlayerInput[] playerInputs = new PlayerInput[2];
 
-    [SerializeField] GameObject titleUI;
-    [SerializeField] GameObject[] titlePlayerUIs;
-    TextMeshProUGUI[] inputTexts = new TextMeshProUGUI[2];
-    TextMeshProUGUI[] instructionTexts = new TextMeshProUGUI[2];
+    [SerializeField] TextMeshProUGUI[] readyTexts = new TextMeshProUGUI[2];
+    [SerializeField] TextMeshProUGUI[] okTexts = new TextMeshProUGUI[2];
 
     [SerializeField] GameObject gameUI;
     TextMeshProUGUI startCountDownText;
@@ -25,6 +23,7 @@ public class GameManager : MonoBehaviour
     TextMeshProUGUI[] resultMissesTexts = new TextMeshProUGUI[2];
     TextMeshProUGUI[] resultScoreTexts = new TextMeshProUGUI[2];
 
+    public bool setUpPracticeNotesFlag;
     public bool startFlag;
     public bool[] readyFlags = new bool[2];
     [SerializeField] float readyTime;
@@ -41,21 +40,33 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Instance = this;
-        Init(); 
-        //SetUpController();
-        readyFlags[0] = true;
-        readyFlags[1] = true;
+        Init();
+        setUpPracticeNotesFlag = true;
+        readyTexts[0].gameObject.SetActive(true);
+        readyTexts[1].gameObject.SetActive(true);
     }
 
     void Update()
     {
-        //if (!gameFlag) SetUpController();
         NotesManagerSetUp();
         GameStart();
+
+        for (int i = 0; i < 2; i++)
+        {
+            if (readyFlags[i])
+            {
+                readyTexts[i].gameObject.SetActive(false);
+                okTexts[i].gameObject.SetActive(true);
+            }
+        }
+
         if (readyFlags[0] && readyFlags[1])
         {
             if (readyTimer > readyTime)
             {
+                setUpPracticeNotesFlag = false;
+                okTexts[0].gameObject.SetActive(false);
+                okTexts[1].gameObject.SetActive(false);
                 readyTimer = 0f;
                 readyFlags[0] = false;
                 readyFlags[1] = false;
@@ -76,10 +87,6 @@ public class GameManager : MonoBehaviour
 
     void Init()
     {
-        //inputTexts[0] = titlePlayerUIs[0].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-        //inputTexts[1] = titlePlayerUIs[1].transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-        //instructionTexts[0] = titlePlayerUIs[0].transform.GetChild(2).GetComponent<TextMeshProUGUI>();
-        //instructionTexts[1] = titlePlayerUIs[1].transform.GetChild(2).GetComponent<TextMeshProUGUI>();
         resultRoundsTexts[0] = resultUI.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>();
         resultRoundsTexts[1] = resultUI.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>();
         resultCorrectTexts[0] = resultUI.transform.GetChild(0).GetChild(0).GetChild(2).GetComponent<TextMeshProUGUI>();
@@ -94,95 +101,10 @@ public class GameManager : MonoBehaviour
         gameTimerText.text = $"01:00";
     }
 
-    void SetUpController()
-    {
-        var gamepads = Gamepad.all;
-        if (gamepads.Count == 0)
-        {
-            inputTexts[0].text = $"Input : Keyboard\n(WASD)";
-            instructionTexts[0].text = $"pless W";
-            inputTexts[1].text = $"Input : Keyboard\n(Arrows)";
-            instructionTexts[1].text = $"pless UpArrow";
-        }
-        else if (gamepads.Count == 1)
-        {
-            inputTexts[0].text = $"Input : Controller\n(ABXY)";
-            instructionTexts[0].text = $"pless X";
-            inputTexts[1].text = $"Input : Keyboard\n(WASD)";
-            instructionTexts[1].text = $"pless W";
-        }
-        else if (gamepads.Count == 2)
-        {
-            inputTexts[0].text = $"Input : Controller\n(ABXY)";
-            instructionTexts[0].text = $"pless X";
-            inputTexts[1].text = $"Input : Controller\n(ABXY)";
-            instructionTexts[1].text = $"pless X";
-        }
-
-        if (readyFlags[0]) instructionTexts[0].color = Color.green;
-        else instructionTexts[0].color = Color.white;
-        if (readyFlags[1]) instructionTexts[1].color = Color.green;
-        else instructionTexts[1].color = Color.white;
-
-
-        // コントローラーの接続なし
-        //if (gamepads.Count == 0)
-        //{
-        //    notesManagers[0].playerNumber = 0;
-        //    notesManagers[1].playerNumber = 1;
-
-
-
-        //    if (readyFlags[0]) instructionTexts[0].color = Color.green;
-        //    else instructionTexts[0].color = Color.white;
-        //    if (readyFlags[1]) instructionTexts[1].color = Color.green;
-        //    else instructionTexts[1].color = Color.white;
-        //}
-        //// 　コントローラー1つ目
-        //if (gamepads.Count >= 1)
-        //{
-        //    notesManagers[0].playerNumber = 0;
-        //    notesManagers[0].gamepad = gamepads[0];
-        //    InputUser.PerformPairingWithDevice(gamepads[0], playerInputs[0].user);
-        //    notesManagers[1].playerNumber = 1;
-        //    InputUser.PerformPairingWithDevice(Keyboard.current, playerInputs[1].user);
-
-
-
-        //    if (readyFlags[0]) instructionTexts[0].color = Color.green;
-        //    else instructionTexts[0].color = Color.white;
-        //    if (readyFlags[1]) instructionTexts[1].color = Color.green;
-        //    else instructionTexts[1].color = Color.white;
-        //}
-        //// 　コントローラー2つ接続の場合
-        //if (gamepads.Count >= 2)
-        //{
-        //    notesManagers[0].playerNumber = 0;
-        //    notesManagers[0].gamepad = gamepads[0];
-        //    playerInputs[0].user.UnpairDevices();
-        //    InputUser.PerformPairingWithDevice(gamepads[0], playerInputs[0].user);
-        //    notesManagers[1].playerNumber = 1;
-        //    notesManagers[1].gamepad = gamepads[1];
-        //    playerInputs[1].user.UnpairDevices();
-        //    InputUser.PerformPairingWithDevice(gamepads[1], playerInputs[1].user);
-
-        //    inputTexts[0].text = $"Input : Controller\n(ABXY)";
-        //    instructionTexts[0].text = $"pless X"; 
-        //    inputTexts[1].text = $"Input : Controller\n(ABXY)";
-        //    instructionTexts[1].text = $"pless X";
-
-        //    if (readyFlags[0]) instructionTexts[0].color = Color.green;
-        //    else instructionTexts[0].color = Color.white;
-        //    if (readyFlags[1]) instructionTexts[1].color = Color.green;
-        //    else instructionTexts[1].color = Color.white;
-        //}
-    }
-
     void NotesManagerSetUp()
     {
         if (setupFlag && startFlag)
         {
-            //gameFlag = true;
             setupFlag = false;
         }
     }
@@ -203,6 +125,8 @@ public class GameManager : MonoBehaviour
                 if (startTimer == 0f)
                 {
                     //titleUI.SetActive(false);
+                    notesManagers[0].StartNotesSetup();
+                    notesManagers[1].StartNotesSetup();
                     startCountDownText.gameObject.SetActive(true);
                 }
                 startTimer += Time.deltaTime;
