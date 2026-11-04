@@ -37,7 +37,7 @@ public class Notes : MonoBehaviour
     [SerializeField] float practiceFailureTime;
     float practiceFailureTimer;
     [Header("êkÇ¶ÇÃê›íË")]
-    [SerializeField] private float shakeAmount = 0.05f;
+    [SerializeField] private float shakeAmount;
     private Vector3 initialPosition;
 
     public bool failureFlag;

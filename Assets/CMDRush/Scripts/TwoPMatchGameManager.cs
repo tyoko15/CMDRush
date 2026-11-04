@@ -128,11 +128,18 @@ public class TwoPMatchGameManager : MonoBehaviour
                     notesManagers[0].StartNotesSetup();
                     notesManagers[1].StartNotesSetup();
                     startCountDownText.gameObject.SetActive(true);
+
+                    // Œø‰Ê‰¹
+                    AudioManager.Instance.PlaySE(7);
                 }
                 startTimer += Time.deltaTime;
                 if (startTimer < 1) startCountDownText.text = $"3";
                 else if (startTimer < 2) startCountDownText.text = "2";
                 else if (startTimer < 3) startCountDownText.text = "1";
+                else if (startTimer < 4) startCountDownText.text = "GO";
+
+                Vector2 randomOffset = Random.insideUnitCircle * 5f;
+                startCountDownText.transform.localPosition = Vector3.zero + new Vector3(randomOffset.x, randomOffset.y, 0f);
             }
         }
     }
@@ -148,10 +155,15 @@ public class TwoPMatchGameManager : MonoBehaviour
             notesManagers[0].ControllerStop();
             notesManagers[1].ControllerStop();
             Result();
+
+            AudioManager.Instance.PlaySE(9);
         }
         else
         {
             gameTimer += Time.deltaTime;
+            // Œø‰Ê‰¹
+            if (gameLimitMinute - 1 == gameMinute && gameTimer > 55f) if (!AudioManager.Instance.sources[8].isPlaying) AudioManager.Instance.PlaySE(8);
+
             if (gameTimer > 60f)
             {
                 gameTimer = 0f;

@@ -18,5 +18,6 @@ EditorBuildSettings:
     path: Assets/CMDRush/Scenes/ChallengeScene.unity
     guid: f042d5ddd10c6ae46bad21c5de154208
   m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: e411f734fe52d684cad111d08e6eb3cb, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

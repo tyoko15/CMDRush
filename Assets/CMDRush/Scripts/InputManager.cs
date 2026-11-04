@@ -251,4 +251,28 @@ public class InputManager : MonoBehaviour
             }
         }
     }
+
+    public void ButtonChange(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            if (Gamepad.all.Count == 0)
+            {
+                if (context.control.path == "/Keyboard/a") notesManagers[0].SetNotesDesign();
+                else if (context.control.path == "/Keyboard/leftArrow") notesManagers[1].SetNotesDesign();
+            }
+            else if (Gamepad.all.Count == 1)
+            {
+                var inputDevice = context.control.device;
+                if (gamepads[0].deviceId == inputDevice.deviceId) notesManagers[0].SetNotesDesign();
+                else if (context.control.path == "/Keyboard/leftArrow") notesManagers[1].SetNotesDesign();
+            }
+            else
+            {
+                var inputDevice = context.control.device;
+                if (gamepads[0].deviceId == inputDevice.deviceId) notesManagers[0].SetNotesDesign();
+                else if (gamepads[1].deviceId == inputDevice.deviceId) notesManagers[1].SetNotesDesign();
+            }
+        }
+    }
 }

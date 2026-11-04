@@ -61,7 +61,9 @@ public class NotesManager : MonoBehaviour
     float currentAmount;
     [SerializeField] float countDownTime;
     float countDownTimer;
+    int successSECount;
 
+    public bool changeNotesDesignFlag;
     void Start()
     {
 
@@ -383,6 +385,20 @@ public class NotesManager : MonoBehaviour
                 score += 100;
                 correctAnswerRate++;
                 correctCount++;
+
+                // 効果音
+                if (countDownTimer < 0.8f)
+                {
+                    AudioManager.Instance.PlaySE(successSECount);
+                    if (successSECount < 5) successSECount++;                    
+                    else successSECount = 4;
+                }
+                else
+                {
+                    successSECount = 0;
+                    AudioManager.Instance.PlaySE(successSECount);
+                }
+
                 if (totalCorrectAnswer == correctAnswerRate) RoundUp();
                 else
                 {
@@ -399,6 +415,10 @@ public class NotesManager : MonoBehaviour
                 missCount++;
                 notesCount = 0;
                 resetNotesFlag = true;
+
+                // 効果音
+                successSECount = 0;
+                AudioManager.Instance.PlaySE(6);
             }
             countDownTimer = 0;
             commandFlag = false;
@@ -452,7 +472,31 @@ public class NotesManager : MonoBehaviour
         selectCommand = i;
         commandFlag = true;
     }
+    
+    public void SetNotesDesign()
+    {
+        changeNotesDesignFlag = (!changeNotesDesignFlag) ? true : false;
 
+        if (!changeNotesDesignFlag)
+        {
+            // コントローラーに合わせる
+            for (int i = 0; i < notesList.Count; i++)
+            {
+                NotesData d = notesList[i].data;
+                notesList[i].GetComponent<SpriteRenderer>().sprite = notesSprites[(int)d.type + (int)controllerKind * 4];
+            }    
+        }
+        else
+        {
+            // 矢印のデザイン
+            for (int i = 0; i < notesList.Count; i++)
+            {
+                NotesData d = notesList[i].data;
+                notesList[i].GetComponent<SpriteRenderer>().sprite = notesSprites[(int)d.type];
+            }
+        }
+    }
+    
     private void OnDisable()
     {
         if (gamepad != null) gamepad.SetMotorSpeeds(0f, 0f);
