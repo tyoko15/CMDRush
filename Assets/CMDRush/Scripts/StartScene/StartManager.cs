@@ -5,7 +5,9 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.DualShock;
 using UnityEngine.InputSystem.Switch;
 using UnityEngine.InputSystem.XInput;
-using JetBrains.Annotations;
+using UnityEngine.SceneManagement;
+using System;
+using System.Xml.Serialization;
 
 public enum InputKind
 {
@@ -43,17 +45,30 @@ public class StartManager : MonoBehaviour
     [SerializeField] GameObject playerUI;
     Image[] controllerImages = new Image[2];
     Image[] readyImages = new Image[2];
+
+    public bool[] readyFlags = new bool[2];
+    bool readyFlag;
+
+    Action move;
     void Start()
     {
         Instance = this;
 
         Set();
         Init();
+
+        move += SceneMove;
     }
 
     void Update()
     {
         UpdateUI();
+
+        if (readyFlags[0] && readyFlags[1] && !readyFlag)
+        {
+            Fade.Instance.FadeIn(1.0f, move);
+            readyFlag = true;
+        }
     }
 
     void Set()
@@ -143,6 +158,36 @@ public class StartManager : MonoBehaviour
                     readyImages[i].sprite = upButtonSprites[3];
                     controllerImages[i].sprite = controllerSprites[3]; 
                     break;
+            }
+        }
+    }
+
+
+    void SceneMove()
+    {
+        SceneManager.LoadScene("2PMatchScene");
+    }
+
+    public void ButtonX(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            if (Gamepad.all.Count == 0)
+            {
+                if (context.control.path == "/Keyboard/w") readyFlags[0] = true;
+                else if (context.control.path == "/Keyboard/upArrow") readyFlags[1] = true;
+            }
+            else if (Gamepad.all.Count == 1)
+            {
+                var inputDevice = context.control.device;
+                if (gamepads[0].deviceId == inputDevice.deviceId) readyFlags[0] = true;
+                else if (context.control.path == "/Keyboard/upArrow") readyFlags[1] = true;
+            }
+            else
+            {
+                var inputDevice = context.control.device;
+                if (gamepads[0].deviceId == inputDevice.deviceId) readyFlags[0] = true;
+                else if (gamepads[1].deviceId == inputDevice.deviceId) readyFlags[1] = true;
             }
         }
     }

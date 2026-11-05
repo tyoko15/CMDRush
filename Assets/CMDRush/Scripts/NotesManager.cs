@@ -409,16 +409,26 @@ public class NotesManager : MonoBehaviour
             }
             else
             {
-                currentAmount = countDownImage.fillAmount;
-                score -= 50;
-                correctAnswerRate = 0;
-                missCount++;
-                notesCount = 0;
-                resetNotesFlag = true;
+                // ラッキーチャンス
+                int luckyChance = Random.Range(0, 10);
+                if (luckyChance == 0)
+                {
+                    currentAmount = countDownImage.fillAmount;
+                    notesList[0].practiceFailureFlag = true;
+                }
+                else
+                {
+                    currentAmount = countDownImage.fillAmount;
+                    score -= 50;
+                    correctAnswerRate = 0;
+                    missCount++;
+                    notesCount = 0;
+                    resetNotesFlag = true;
 
-                // 効果音
-                successSECount = 0;
-                AudioManager.Instance.PlaySE(6);
+                    // 効果音
+                    successSECount = 0;
+                    AudioManager.Instance.PlaySE(6);
+                }
             }
             countDownTimer = 0;
             commandFlag = false;

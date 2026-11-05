@@ -44,6 +44,8 @@ public class TwoPMatchGameManager : MonoBehaviour
         setUpPracticeNotesFlag = true;
         readyTexts[0].gameObject.SetActive(true);
         readyTexts[1].gameObject.SetActive(true);
+
+        Fade.Instance.FadeOut(1.0f, null);
     }
 
     void Update()
