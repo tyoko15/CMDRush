@@ -22,16 +22,28 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 using UnityEngine;
 using System.Collections;
-using UnityEngine.Assertions;
 
 public class Fade : MonoBehaviour
 {
 	public static Fade Instance; 
 	IFade fade;
 
+
+	void Awake ()
+	{
+		//if (Instance != null && Instance != this)
+		//{
+		//	Destroy(gameObject);
+		//	return;
+		//}
+
+		Instance = this;
+
+		DontDestroyOnLoad(gameObject);
+	}
+    
 	void Start ()
 	{
-		Instance = this;
 		Init ();
 		fade.Range = cutoutRange;
 	}
@@ -51,26 +63,27 @@ public class Fade : MonoBehaviour
 
 	IEnumerator FadeoutCoroutine (float time, System.Action action)
 	{
-		float endTime = Time.timeSinceLevelLoad + time * (cutoutRange);
-
+		cutoutRange = 1;
+        float endTime = Time.timeSinceLevelLoad + time * (cutoutRange);
 		var endFrame = new WaitForEndOfFrame ();
 
 		while (Time.timeSinceLevelLoad <= endTime) {
 			cutoutRange = (endTime - Time.timeSinceLevelLoad) / time;
 			fade.Range = cutoutRange;
-			yield return endFrame;
+            yield return endFrame;
 		}
 		cutoutRange = 0;
 		fade.Range = cutoutRange;
 
-		if (action != null) {
+        if (action != null) {
 			action ();
 		}
 	}
 
 	IEnumerator FadeinCoroutine (float time, System.Action action)
 	{
-		float endTime = Time.timeSinceLevelLoad + time * (1 - cutoutRange);
+		cutoutRange = 0;
+        float endTime = Time.timeSinceLevelLoad + time * (1 - cutoutRange);
 		
 		var endFrame = new WaitForEndOfFrame ();
 
@@ -82,7 +95,6 @@ public class Fade : MonoBehaviour
 		cutoutRange = 1;
 		fade.Range = cutoutRange;
 
-		Debug.Log("FadeinCoroutine completed. cutoutRange: " + cutoutRange);
         if (action != null) {
 			action ();
 		}

@@ -61,9 +61,12 @@ public class NotesManager : MonoBehaviour
     float currentAmount;
     [SerializeField] float countDownTime;
     float countDownTimer;
-    int successSECount;
+    public int successSECount;
 
     public bool changeNotesDesignFlag;
+
+    bool nomissFlag;
+    int scoreRote;
     void Start()
     {
 
@@ -127,7 +130,15 @@ public class NotesManager : MonoBehaviour
         d.type = (NotesType)Random.Range(0, 4);
         n.GetComponent<Notes>().notesManager = this;
         n.GetComponent<Notes>().data = d;
-        n.GetComponent<SpriteRenderer>().sprite = notesSprites[(int)d.type + (int)controllerKind * 4];
+        if (!changeNotesDesignFlag)
+        {
+            n.GetComponent<SpriteRenderer>().sprite = notesSprites[(int)d.type + (int)controllerKind * 4];           
+        }
+        else
+        {
+            n.GetComponent<SpriteRenderer>().sprite = notesSprites[(int)d.type];
+        }
+        //n.GetComponent<SpriteRenderer>().sprite = notesSprites[(int)d.type + (int)controllerKind * 4];
         n.transform.SetParent(transform, true);
         n.transform.position = positions[0];
         n.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
@@ -353,6 +364,8 @@ public class NotesManager : MonoBehaviour
             countDownTimer = 0f;
             inputAllowedFlag = false;
             resetNotesFlag = true;
+            nomissFlag = true;
+            scoreRote = 1;
         }
         else
         {
@@ -371,6 +384,10 @@ public class NotesManager : MonoBehaviour
         notesCount = 0;
         StartNotesSetup();
         setUpNotesFlag = true;
+        successSECount = 0;
+        if (!nomissFlag) scoreRote = 3;
+        else scoreRote = 0;
+        nomissFlag = false;
     }
 
     void CommandControl()
@@ -382,22 +399,25 @@ public class NotesManager : MonoBehaviour
             {
                 currentAmount = countDownImage.fillAmount;
                 notesList[0].successFlag = true;
-                score += 100;
+                score += 100 * scoreRote;
                 correctAnswerRate++;
                 correctCount++;
 
                 // Œø‰Ê‰¹
-                if (countDownTimer < 0.8f)
+                AudioManager.Instance.PlaySE(successSECount);
+                if (totalCorrectAnswer-1 == correctAnswerRate)
                 {
-                    AudioManager.Instance.PlaySE(successSECount);
-                    if (successSECount < 5) successSECount++;                    
-                    else successSECount = 4;
+                    successSECount = 7;
+                }
+                else if (totalCorrectAnswer-2 == correctAnswerRate)
+                {
+                    successSECount = 6;
                 }
                 else
                 {
-                    successSECount = 0;
-                    AudioManager.Instance.PlaySE(successSECount);
+                    if (correctAnswerRate % roundCount == 0) successSECount++;
                 }
+
 
                 if (totalCorrectAnswer == correctAnswerRate) RoundUp();
                 else
@@ -424,10 +444,12 @@ public class NotesManager : MonoBehaviour
                     missCount++;
                     notesCount = 0;
                     resetNotesFlag = true;
+                    nomissFlag = true;
+                    scoreRote = 1;
 
                     // Œø‰Ê‰¹
                     successSECount = 0;
-                    AudioManager.Instance.PlaySE(6);
+                    AudioManager.Instance.PlaySE(8);
                 }
             }
             countDownTimer = 0;
@@ -458,7 +480,6 @@ public class NotesManager : MonoBehaviour
             else
             {
                 notesList[0].practiceFailureFlag = true;
-
             }
             practiceCommandFlag = false;
         }

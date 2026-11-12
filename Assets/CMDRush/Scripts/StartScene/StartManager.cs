@@ -45,6 +45,7 @@ public class StartManager : MonoBehaviour
     [SerializeField] GameObject playerUI;
     Image[] controllerImages = new Image[2];
     Image[] readyImages = new Image[2];
+    TextMeshProUGUI[] readyTexts = new TextMeshProUGUI[2];
 
     public bool[] readyFlags = new bool[2];
     bool readyFlag;
@@ -126,6 +127,8 @@ public class StartManager : MonoBehaviour
         controllerImages[1] = player[1].transform.GetChild(1).GetChild(5).GetComponent<Image>();
         readyImages[0] = player[0].transform.GetChild(1).GetChild(6).GetComponent<Image>();
         readyImages[1] = player[1].transform.GetChild(1).GetChild(6).GetComponent<Image>();
+        readyTexts[0] = player[0].transform.GetChild(1).GetChild(7).GetComponent<TextMeshProUGUI>();
+        readyTexts[1] = player[1].transform.GetChild(1).GetChild(7).GetComponent<TextMeshProUGUI>();
     }
 
     void UpdateUI()
@@ -189,6 +192,22 @@ public class StartManager : MonoBehaviour
                 if (gamepads[0].deviceId == inputDevice.deviceId) readyFlags[0] = true;
                 else if (gamepads[1].deviceId == inputDevice.deviceId) readyFlags[1] = true;
             }
+            for (int i = 0; i < 2; i++)
+            {
+                if (readyFlags[i])
+                {
+                    readyTexts[i].color = Color.green;
+                    readyImages[i].color = Color.green;
+                    gamepads[i].SetMotorSpeeds(0.5f, 0.5f);
+                }
+            }
+        }
+    }
+    private void OnDisable()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            if (gamepads[i] != null) gamepads[i].SetMotorSpeeds(0f, 0f);
         }
     }
 }

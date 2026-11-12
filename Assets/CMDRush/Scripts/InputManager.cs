@@ -258,14 +258,14 @@ public class InputManager : MonoBehaviour
         {
             if (Gamepad.all.Count == 0)
             {
-                if (context.control.path == "/Keyboard/a") notesManagers[0].SetNotesDesign();
-                else if (context.control.path == "/Keyboard/leftArrow") notesManagers[1].SetNotesDesign();
+                if (context.control.path == "/Keyboard/e") notesManagers[0].SetNotesDesign();
+                else if (context.control.path == "/Keyboard/rightShift") notesManagers[1].SetNotesDesign();
             }
             else if (Gamepad.all.Count == 1)
             {
                 var inputDevice = context.control.device;
                 if (gamepads[0].deviceId == inputDevice.deviceId) notesManagers[0].SetNotesDesign();
-                else if (context.control.path == "/Keyboard/leftArrow") notesManagers[1].SetNotesDesign();
+                else if (context.control.path == "/Keyboard/rightShift") notesManagers[1].SetNotesDesign();
             }
             else
             {

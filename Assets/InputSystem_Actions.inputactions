@@ -709,10 +709,21 @@
                 {
                     "name": "",
                     "id": "3a97e6dd-b447-4f76-a719-93486a43dfcc",
-                    "path": "",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Change",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "de3d0a66-a5bb-4ab4-8194-3eac187bf1cc",
+                    "path": "<Keyboard>/rightShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Change",
                     "isComposite": false,
                     "isPartOfComposite": false

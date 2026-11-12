@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -37,6 +38,8 @@ public class TwoPMatchGameManager : MonoBehaviour
     float gameTimer;
 
     public bool setupFlag;
+
+    Action move;
     void Start()
     {
         Instance = this;
@@ -45,7 +48,8 @@ public class TwoPMatchGameManager : MonoBehaviour
         readyTexts[0].gameObject.SetActive(true);
         readyTexts[1].gameObject.SetActive(true);
 
-        Fade.Instance.FadeOut(1.0f, null);
+        Fade.Instance.FadeOut(1.0f);
+        move += SceneMove;
     }
 
     void Update()
@@ -82,7 +86,7 @@ public class TwoPMatchGameManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                SceneManager.LoadScene("2PMatchScene");
+                Fade.Instance.FadeIn(1.0f, move);
             }
         }
     }
@@ -132,7 +136,7 @@ public class TwoPMatchGameManager : MonoBehaviour
                     startCountDownText.gameObject.SetActive(true);
 
                     // Œø‰Ê‰¹
-                    AudioManager.Instance.PlaySE(7);
+                    AudioManager.Instance.PlaySE(9);
                 }
                 startTimer += Time.deltaTime;
                 if (startTimer < 1) startCountDownText.text = $"3";
@@ -140,7 +144,7 @@ public class TwoPMatchGameManager : MonoBehaviour
                 else if (startTimer < 3) startCountDownText.text = "1";
                 else if (startTimer < 4) startCountDownText.text = "GO";
 
-                Vector2 randomOffset = Random.insideUnitCircle * 5f;
+                Vector2 randomOffset = UnityEngine.Random.insideUnitCircle * 5f;
                 startCountDownText.transform.localPosition = Vector3.zero + new Vector3(randomOffset.x, randomOffset.y, 0f);
             }
         }
@@ -158,13 +162,13 @@ public class TwoPMatchGameManager : MonoBehaviour
             notesManagers[1].ControllerStop();
             Result();
 
-            AudioManager.Instance.PlaySE(9);
+            AudioManager.Instance.PlaySE(11);
         }
         else
         {
             gameTimer += Time.deltaTime;
             // Œø‰Ê‰¹
-            if (gameLimitMinute - 1 == gameMinute && gameTimer > 55f) if (!AudioManager.Instance.sources[8].isPlaying) AudioManager.Instance.PlaySE(8);
+            if (gameLimitMinute - 1 == gameMinute && gameTimer > 55f) if (!AudioManager.Instance.sources[10].isPlaying) AudioManager.Instance.PlaySE(10);
 
             if (gameTimer > 60f)
             {
@@ -189,5 +193,10 @@ public class TwoPMatchGameManager : MonoBehaviour
         resultMissesTexts[1].text = $"{notesManagers[1].missCount}";
         resultScoreTexts[0].text = $"{notesManagers[0].score}";
         resultScoreTexts[1].text = $"{notesManagers[1].score}";
+    }
+
+    void SceneMove()
+    {
+        SceneManager.LoadScene("2PMatchScene");
     }
 }
