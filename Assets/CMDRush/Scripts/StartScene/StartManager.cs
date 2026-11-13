@@ -67,7 +67,7 @@ public class StartManager : MonoBehaviour
 
         if (readyFlags[0] && readyFlags[1] && !readyFlag)
         {
-            Fade.Instance.FadeIn(1.0f, move);
+            FadeManager.Instance.fade.StartFadeIn(1.0f, move);
             readyFlag = true;
         }
     }
@@ -198,7 +198,7 @@ public class StartManager : MonoBehaviour
                 {
                     readyTexts[i].color = Color.green;
                     readyImages[i].color = Color.green;
-                    gamepads[i].SetMotorSpeeds(0.5f, 0.5f);
+                    if (gamepads[i] != null) gamepads[i].SetMotorSpeeds(0.5f, 0.5f);
                 }
             }
         }

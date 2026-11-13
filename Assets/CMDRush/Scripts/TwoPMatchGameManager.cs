@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -39,7 +40,8 @@ public class TwoPMatchGameManager : MonoBehaviour
 
     public bool setupFlag;
 
-    Action move;
+    Action getFade;
+    Action moveScene;
     void Start()
     {
         Instance = this;
@@ -48,8 +50,12 @@ public class TwoPMatchGameManager : MonoBehaviour
         readyTexts[0].gameObject.SetActive(true);
         readyTexts[1].gameObject.SetActive(true);
 
-        Fade.Instance.FadeOut(1.0f);
-        move += SceneMove;
+        FadeManager.Instance.fade.StartFadeOut(1.0f);
+
+        getFade += FadeGet;
+        moveScene += SceneMove;
+
+        StartCoroutine(GetFadeManager());
     }
 
     void Update()
@@ -86,7 +92,7 @@ public class TwoPMatchGameManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                Fade.Instance.FadeIn(1.0f, move);
+                FadeManager.Instance.fade.StartFadeIn(1.0f, moveScene);
             }
         }
     }
@@ -105,6 +111,17 @@ public class TwoPMatchGameManager : MonoBehaviour
         startCountDownText = gameUI.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         gameTimerText = gameUI.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
         gameTimerText.text = $"01:00";
+    }
+
+    IEnumerator GetFadeManager()
+    {
+        bool end = false;
+        while (end)
+        {
+            if (FadeManager.Instance != null) end = true;
+            else yield return null;
+        }
+        getFade();
     }
 
     void NotesManagerSetUp()
@@ -193,6 +210,11 @@ public class TwoPMatchGameManager : MonoBehaviour
         resultMissesTexts[1].text = $"{notesManagers[1].missCount}";
         resultScoreTexts[0].text = $"{notesManagers[0].score}";
         resultScoreTexts[1].text = $"{notesManagers[1].score}";
+    }
+
+    void FadeGet()
+    {
+        FadeManager.Instance.fade.StartFadeOut(1.0f);
     }
 
     void SceneMove()
