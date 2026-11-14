@@ -15,6 +15,9 @@ public class TwoPMatchGameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] readyTexts = new TextMeshProUGUI[2];
     [SerializeField] TextMeshProUGUI[] okTexts = new TextMeshProUGUI[2];
 
+    [SerializeField]
+    PlayerNameView _playerName1p = default;
+
     [SerializeField] GameObject gameUI;
     TextMeshProUGUI startCountDownText;
     TextMeshProUGUI gameTimerText;
@@ -99,6 +102,10 @@ public class TwoPMatchGameManager : MonoBehaviour
 
     void Init()
     {
+        if(_playerName1p != null)
+        {
+            _playerName1p.SetTextSafe("Player 1");
+        }
         resultRoundsTexts[0] = resultUI.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>();
         resultRoundsTexts[1] = resultUI.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>();
         resultCorrectTexts[0] = resultUI.transform.GetChild(0).GetChild(0).GetChild(2).GetComponent<TextMeshProUGUI>();
