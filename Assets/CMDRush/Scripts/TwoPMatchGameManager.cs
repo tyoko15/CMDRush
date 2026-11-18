@@ -59,6 +59,25 @@ public class TwoPMatchGameManager : MonoBehaviour
         moveScene += SceneMove;
 
         StartCoroutine(GetFadeManager());
+
+        DataManager.Instance.RegisterResult(
+            playerName: "TARO",
+            round: 5,
+            correct: 150,
+            miss: 0,
+            score: 48000,
+            avgSpeed: 02.00f,
+            maxCombo: 150
+        );
+        DataManager.Instance.RegisterResult(
+            playerName: "JIRO",
+            round: 5,
+            correct: 140,
+            miss: 10,
+            score: 35000,
+            avgSpeed: 01.50f,
+            maxCombo: 50
+        );
     }
 
     void Update()
