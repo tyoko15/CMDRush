@@ -2865,6 +2865,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968d91d91a4badc4991b0cc2d785723f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TwoPMatchGameManager
+  playerNames:
+  - Deguti
+  - Shimada
   notesManagers:
   - {fileID: 1983378918}
   - {fileID: 1080508454}
@@ -6962,22 +6965,22 @@ MonoBehaviour:
   controllerKind: 0
   notesPrefab: {fileID: 4479601114612248310, guid: a04554594040d4e4fb3984262120d639, type: 3}
   notesSprites:
-  - {fileID: 21300000, guid: 539f68fa8f18b4a48971a81f7f52a3cb, type: 3}
-  - {fileID: 21300000, guid: d6b4b73bbba4aec458622da55ac77d82, type: 3}
-  - {fileID: 21300000, guid: 5f9fecb08811d4043900ed964ff4b6ea, type: 3}
-  - {fileID: 21300000, guid: 49cd191ca1cd7dd4d86bb8434e253e5b, type: 3}
-  - {fileID: 21300000, guid: d89f17acd002f9943ac775d4194cc0bb, type: 3}
-  - {fileID: 21300000, guid: 909def3ca7c4efd49a3d119e1208ee1d, type: 3}
-  - {fileID: 21300000, guid: e63b5405f70afdf42b3c3ef368c88785, type: 3}
-  - {fileID: 21300000, guid: 122e114120a1a93449887836ea9d272f, type: 3}
-  - {fileID: 21300000, guid: 5617e8b7a1794bf4ba4808b3a18ecfb8, type: 3}
-  - {fileID: 21300000, guid: 77accfc6a134c234d9e42b7e64fde11e, type: 3}
-  - {fileID: 21300000, guid: e0d9bcb9f3208bc4ca916d50bb364089, type: 3}
-  - {fileID: 21300000, guid: 1a9dc4041e8175547927192b64282c8e, type: 3}
-  - {fileID: 21300000, guid: ac70dc47c3cc9c544b0d3d1f3b186449, type: 3}
-  - {fileID: 21300000, guid: 95382294f50f4ab4d9b253f2373d1f83, type: 3}
-  - {fileID: -8165723779175756994, guid: a46979346862bbf4caf21b384665c2df, type: 3}
-  - {fileID: -9007566611773356138, guid: 986e3b4b7aa054942a3ef69dbdb977b5, type: 3}
+  - {fileID: -1162569161695696328, guid: 534ab3af305ba8b409c86e7e5c7d84c5, type: 3}
+  - {fileID: 8855964598952731768, guid: d629ad03e5f16144e828cae16225f107, type: 3}
+  - {fileID: 7590259295959806165, guid: a36e3c78ee9fde8448b9c194530cb305, type: 3}
+  - {fileID: 4837915744532966215, guid: d3abfb55edae43b47bdc6f379ad42d05, type: 3}
+  - {fileID: 2672497953411766335, guid: 8ce1789e777acec4f9bd850aea55a179, type: 3}
+  - {fileID: 5622416547751527034, guid: 836677646ea8ac946919bdfa4913e96b, type: 3}
+  - {fileID: -6525569829918163186, guid: 2a3186ed468b70d499c358f7c3c913b4, type: 3}
+  - {fileID: -3389797908370870349, guid: 265226e7e28c2f54388617de60b1da88, type: 3}
+  - {fileID: -6158730625307054618, guid: 1449bc94907344843bbe8b39bdfc6ebb, type: 3}
+  - {fileID: -7952668737664446370, guid: 5b0b197ff6d229b4db57af219d563601, type: 3}
+  - {fileID: 297478490134634664, guid: b933e8787a1e56440b88494f3d7632f1, type: 3}
+  - {fileID: 5287775260160535159, guid: a9b2619b04d662d4e9b96f48a2593144, type: 3}
+  - {fileID: -344508189486415362, guid: 916a949cb17e69440a5a6dd10a67da5f, type: 3}
+  - {fileID: -7157751221679211650, guid: ab76ccbaf92f4714c8ad1bc9644062e5, type: 3}
+  - {fileID: -3138850490673852555, guid: 7f6dcf3ffa80e7c499af832c432da213, type: 3}
+  - {fileID: -1009847325306830784, guid: 0f8912c1469f7724cb8091a05fd9e6f5, type: 3}
   positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
@@ -6990,6 +6993,8 @@ MonoBehaviour:
   roundCount: 0
   correctCount: 0
   missCount: 0
+  avgSpeed: 0
+  maxCombo: 0
   totalCorrectAnswer: 5
   addQuestion: 5
   setUpPracticeNotesFlag: 0
@@ -11510,22 +11515,22 @@ MonoBehaviour:
   controllerKind: 0
   notesPrefab: {fileID: 4479601114612248310, guid: a04554594040d4e4fb3984262120d639, type: 3}
   notesSprites:
-  - {fileID: 21300000, guid: 539f68fa8f18b4a48971a81f7f52a3cb, type: 3}
-  - {fileID: 21300000, guid: d6b4b73bbba4aec458622da55ac77d82, type: 3}
-  - {fileID: 21300000, guid: 5f9fecb08811d4043900ed964ff4b6ea, type: 3}
-  - {fileID: 21300000, guid: 49cd191ca1cd7dd4d86bb8434e253e5b, type: 3}
-  - {fileID: 21300000, guid: d89f17acd002f9943ac775d4194cc0bb, type: 3}
-  - {fileID: 21300000, guid: 909def3ca7c4efd49a3d119e1208ee1d, type: 3}
-  - {fileID: 21300000, guid: e63b5405f70afdf42b3c3ef368c88785, type: 3}
-  - {fileID: 21300000, guid: 122e114120a1a93449887836ea9d272f, type: 3}
-  - {fileID: 21300000, guid: 5617e8b7a1794bf4ba4808b3a18ecfb8, type: 3}
-  - {fileID: 21300000, guid: 77accfc6a134c234d9e42b7e64fde11e, type: 3}
-  - {fileID: 21300000, guid: e0d9bcb9f3208bc4ca916d50bb364089, type: 3}
-  - {fileID: 21300000, guid: 1a9dc4041e8175547927192b64282c8e, type: 3}
-  - {fileID: 21300000, guid: ac70dc47c3cc9c544b0d3d1f3b186449, type: 3}
-  - {fileID: 21300000, guid: 95382294f50f4ab4d9b253f2373d1f83, type: 3}
-  - {fileID: -8165723779175756994, guid: a46979346862bbf4caf21b384665c2df, type: 3}
-  - {fileID: -9007566611773356138, guid: 986e3b4b7aa054942a3ef69dbdb977b5, type: 3}
+  - {fileID: -1162569161695696328, guid: 534ab3af305ba8b409c86e7e5c7d84c5, type: 3}
+  - {fileID: 8855964598952731768, guid: d629ad03e5f16144e828cae16225f107, type: 3}
+  - {fileID: 7590259295959806165, guid: a36e3c78ee9fde8448b9c194530cb305, type: 3}
+  - {fileID: 4837915744532966215, guid: d3abfb55edae43b47bdc6f379ad42d05, type: 3}
+  - {fileID: 2672497953411766335, guid: 8ce1789e777acec4f9bd850aea55a179, type: 3}
+  - {fileID: 5622416547751527034, guid: 836677646ea8ac946919bdfa4913e96b, type: 3}
+  - {fileID: -6525569829918163186, guid: 2a3186ed468b70d499c358f7c3c913b4, type: 3}
+  - {fileID: -3389797908370870349, guid: 265226e7e28c2f54388617de60b1da88, type: 3}
+  - {fileID: -6158730625307054618, guid: 1449bc94907344843bbe8b39bdfc6ebb, type: 3}
+  - {fileID: -7952668737664446370, guid: 5b0b197ff6d229b4db57af219d563601, type: 3}
+  - {fileID: 297478490134634664, guid: b933e8787a1e56440b88494f3d7632f1, type: 3}
+  - {fileID: 5287775260160535159, guid: a9b2619b04d662d4e9b96f48a2593144, type: 3}
+  - {fileID: -344508189486415362, guid: 916a949cb17e69440a5a6dd10a67da5f, type: 3}
+  - {fileID: -7157751221679211650, guid: ab76ccbaf92f4714c8ad1bc9644062e5, type: 3}
+  - {fileID: -3138850490673852555, guid: 7f6dcf3ffa80e7c499af832c432da213, type: 3}
+  - {fileID: -1009847325306830784, guid: 0f8912c1469f7724cb8091a05fd9e6f5, type: 3}
   positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
@@ -11538,6 +11543,8 @@ MonoBehaviour:
   roundCount: 0
   correctCount: 0
   missCount: 0
+  avgSpeed: 0
+  maxCombo: 0
   totalCorrectAnswer: 5
   addQuestion: 5
   setUpPracticeNotesFlag: 0

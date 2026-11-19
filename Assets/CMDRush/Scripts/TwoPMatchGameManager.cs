@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class TwoPMatchGameManager : MonoBehaviour
 {
+    public string[] playerNames = new string[2];
+
     public static TwoPMatchGameManager Instance;
 
     public NotesManager[] notesManagers = new NotesManager[2];
@@ -26,6 +28,8 @@ public class TwoPMatchGameManager : MonoBehaviour
     TextMeshProUGUI[] resultRoundsTexts = new TextMeshProUGUI[2];
     TextMeshProUGUI[] resultCorrectTexts = new TextMeshProUGUI[2];
     TextMeshProUGUI[] resultMissesTexts = new TextMeshProUGUI[2];
+    TextMeshProUGUI[] resultAVGSpeedTexts = new TextMeshProUGUI[2];
+    TextMeshProUGUI[] resultMaxComboTexts = new TextMeshProUGUI[2];
     TextMeshProUGUI[] resultScoreTexts = new TextMeshProUGUI[2];
 
     public bool setUpPracticeNotesFlag;
@@ -59,25 +63,6 @@ public class TwoPMatchGameManager : MonoBehaviour
         moveScene += SceneMove;
 
         StartCoroutine(GetFadeManager());
-
-        DataManager.Instance.RegisterResult(
-            playerName: "TARO",
-            round: 5,
-            correct: 150,
-            miss: 0,
-            score: 48000,
-            avgSpeed: 02.00f,
-            maxCombo: 150
-        );
-        DataManager.Instance.RegisterResult(
-            playerName: "JIRO",
-            round: 5,
-            correct: 140,
-            miss: 10,
-            score: 35000,
-            avgSpeed: 01.50f,
-            maxCombo: 50
-        );
     }
 
     void Update()
@@ -131,8 +116,12 @@ public class TwoPMatchGameManager : MonoBehaviour
         resultCorrectTexts[1] = resultUI.transform.GetChild(0).GetChild(1).GetChild(2).GetComponent<TextMeshProUGUI>();
         resultMissesTexts[0] = resultUI.transform.GetChild(0).GetChild(0).GetChild(3).GetComponent<TextMeshProUGUI>();
         resultMissesTexts[1] = resultUI.transform.GetChild(0).GetChild(1).GetChild(3).GetComponent<TextMeshProUGUI>();
-        resultScoreTexts[0] = resultUI.transform.GetChild(0).GetChild(0).GetChild(4).GetComponent<TextMeshProUGUI>();
-        resultScoreTexts[1] = resultUI.transform.GetChild(0).GetChild(1).GetChild(4).GetComponent<TextMeshProUGUI>();   
+        resultAVGSpeedTexts[0] = resultUI.transform.GetChild(0).GetChild(0).GetChild(4).GetComponent<TextMeshProUGUI>();
+        resultAVGSpeedTexts[1] = resultUI.transform.GetChild(0).GetChild(1).GetChild(4).GetComponent<TextMeshProUGUI>();
+        resultMaxComboTexts[0] = resultUI.transform.GetChild(0).GetChild(0).GetChild(5).GetComponent<TextMeshProUGUI>();
+        resultMaxComboTexts[1] = resultUI.transform.GetChild(0).GetChild(1).GetChild(5).GetComponent<TextMeshProUGUI>();
+        resultScoreTexts[0] = resultUI.transform.GetChild(0).GetChild(0).GetChild(6).GetComponent<TextMeshProUGUI>();
+        resultScoreTexts[1] = resultUI.transform.GetChild(0).GetChild(1).GetChild(6).GetComponent<TextMeshProUGUI>();   
 
         startCountDownText = gameUI.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         gameTimerText = gameUI.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
@@ -234,8 +223,25 @@ public class TwoPMatchGameManager : MonoBehaviour
         resultCorrectTexts[1].text = $"{notesManagers[1].correctCount}";
         resultMissesTexts[0].text = $"{notesManagers[0].missCount}";
         resultMissesTexts[1].text = $"{notesManagers[1].missCount}";
+        resultAVGSpeedTexts[0].text = $"{notesManagers[0].avgSpeed.ToString("00.00")}";
+        resultAVGSpeedTexts[1].text = $"{notesManagers[1].avgSpeed.ToString("00.00")}";
+        resultMaxComboTexts[0].text = $"{notesManagers[0].maxCombo}";
+        resultMaxComboTexts[1].text = $"{notesManagers[1].maxCombo}";
         resultScoreTexts[0].text = $"{notesManagers[0].score}";
         resultScoreTexts[1].text = $"{notesManagers[1].score}";
+
+        for (int i = 0; i < 2; i++)
+        {
+            DataManager.Instance.RegisterResult(
+            playerName: playerNames[i],
+            round: notesManagers[i].roundCount,
+            correct: notesManagers[i].correctCount,
+            miss: notesManagers[i].missCount,
+            score: notesManagers[i].score,
+            avgSpeed: notesManagers[i].avgSpeed,
+            maxCombo: notesManagers[i].maxCombo
+            );
+        }
     }
 
     void FadeGet()

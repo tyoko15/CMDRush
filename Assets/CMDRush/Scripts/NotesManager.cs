@@ -25,6 +25,8 @@ public class NotesManager : MonoBehaviour
     public int roundCount;
     public int correctCount;
     public int missCount;
+    public float avgSpeed;
+    public int maxCombo;
     int correctAnswerRate;
     [SerializeField] int totalCorrectAnswer;
     [SerializeField] int addQuestion;
@@ -67,6 +69,8 @@ public class NotesManager : MonoBehaviour
 
     bool nomissFlag;
     int scoreRote;
+    bool comboFlag;
+    int comboCount;
     void Start()
     {
 
@@ -127,7 +131,8 @@ public class NotesManager : MonoBehaviour
         GameObject n = Instantiate(notesPrefab, Vector2.zero, Quaternion.identity);
         NotesData d = new NotesData();
         d.number = 0;
-        d.type = (NotesType)Random.Range(0, 4);
+        //d.type = (NotesType)Random.Range(0, 4);
+        d.type = (NotesType)3;
         n.GetComponent<Notes>().notesManager = this;
         n.GetComponent<Notes>().data = d;
         if (!changeNotesDesignFlag)
@@ -402,6 +407,7 @@ public class NotesManager : MonoBehaviour
                 score += 100 * scoreRote;
                 correctAnswerRate++;
                 correctCount++;
+                comboCount++;
 
                 // Œø‰Ê‰¹
                 AudioManager.Instance.PlaySE(successSECount);
@@ -446,12 +452,15 @@ public class NotesManager : MonoBehaviour
                     resetNotesFlag = true;
                     nomissFlag = true;
                     scoreRote = 1;
-
+                    if (maxCombo < comboCount) maxCombo = comboCount;
+                    comboCount = 0;
                     // Œø‰Ê‰¹
                     successSECount = 0;
                     AudioManager.Instance.PlaySE(8);
                 }
             }
+            avgSpeed = (correctCount + missCount) / 60f;
+            maxCombo = (maxCombo < comboCount) ? comboCount : maxCombo;
             countDownTimer = 0;
             commandFlag = false;
             inputAllowedFlag = false;

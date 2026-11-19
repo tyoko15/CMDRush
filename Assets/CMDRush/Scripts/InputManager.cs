@@ -115,8 +115,8 @@ public class InputManager : MonoBehaviour
     }
     public void ButtonB(InputAction.CallbackContext context)
     {
-        if (context.started)
-        {
+        //if (context.started)
+        //{
             if (TwoPMatchGameManager.Instance.setUpPracticeNotesFlag)
             {
                 if (Gamepad.all.Count == 0)
@@ -157,7 +157,7 @@ public class InputManager : MonoBehaviour
                     else if (gamepads[1].deviceId == inputDevice.deviceId && notesManagers[1].inputAllowedFlag) notesManagers[1].SetSelectCommand(3);
                 }
             }
-        }
+        //}
     }
     public void ButtonX(InputAction.CallbackContext context)
     {

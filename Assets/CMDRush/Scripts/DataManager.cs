@@ -56,8 +56,8 @@ public class DataManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        filePath = Path.Combine(Application.persistentDataPath, "ranking_db.json");
+        string folderPath = @"C:\CMDRush";
+        filePath = Path.Combine(folderPath, "ranking_db.json");
         LoadDatabase();
     }
 
@@ -136,8 +136,8 @@ public class DataManager : MonoBehaviour
         if (string.IsNullOrWhiteSpace(playerName)) playerName = "NO NAME";
         if (playerName.Length > 8) playerName = playerName.Substring(0, 8); // 8ï∂éöêßå¿
 
-        round = Mathf.Clamp(round, 0, 99);
-        correct = Mathf.Clamp(correct, 0, 99);
+        round = Mathf.Clamp(round, 0, 9999);
+        correct = Mathf.Clamp(correct, 0, 9999);
         miss = Mathf.Clamp(miss, 0, 99);
         score = Mathf.Clamp(score, 0, 999999);
         maxCombo = Mathf.Clamp(maxCombo, 0, 999);
