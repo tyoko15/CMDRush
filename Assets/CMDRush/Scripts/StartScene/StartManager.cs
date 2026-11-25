@@ -1,13 +1,13 @@
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.DualShock;
 using UnityEngine.InputSystem.Switch;
 using UnityEngine.InputSystem.XInput;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using UnityEngine;
 using System;
-using System.Xml.Serialization;
+using TMPro;
+
 
 public enum InputKind
 {
@@ -41,11 +41,19 @@ public class StartManager : MonoBehaviour
     // ì¸óÕê›íË
      public InputData[] playerInputData = new InputData[2];
     Gamepad[] gamepads = new Gamepad[2];
-
+    [SerializeField] CursorController[] cursors = new CursorController[2];
+    [SerializeField] GameObject backGroundUI;
+    [SerializeField] GameObject menuUI;
+    GameObject mainMenu;
+    GameObject gameMenu;
+    GameObject rankingMenu;
+    GameObject registerMenu;
     [SerializeField] GameObject playerUI;
     Image[] controllerImages = new Image[2];
     Image[] readyImages = new Image[2];
     TextMeshProUGUI[] readyTexts = new TextMeshProUGUI[2];
+
+
 
     public bool[] readyFlags = new bool[2];
     bool readyFlag;
@@ -129,6 +137,12 @@ public class StartManager : MonoBehaviour
         readyImages[1] = player[1].transform.GetChild(1).GetChild(6).GetComponent<Image>();
         readyTexts[0] = player[0].transform.GetChild(1).GetChild(7).GetComponent<TextMeshProUGUI>();
         readyTexts[1] = player[1].transform.GetChild(1).GetChild(7).GetComponent<TextMeshProUGUI>();
+
+        for (int i = 0; i < 2; i++) if (gamepads[i] != null) cursors[i].gamepad = gamepads[i];
+        mainMenu = menuUI.transform.GetChild(0).gameObject;
+        gameMenu = menuUI.transform.GetChild(1).gameObject;
+        rankingMenu = menuUI.transform.GetChild(2).gameObject;
+        registerMenu = menuUI.transform.GetChild(3).gameObject;
     }
 
     void UpdateUI()
@@ -171,6 +185,48 @@ public class StartManager : MonoBehaviour
         SceneManager.LoadScene("2PMatchScene");
     }
 
+
+    public void EventRegister()
+    {
+        Debug.Log($"Register");
+        backGroundUI.SetActive(false);
+        mainMenu.SetActive(false);
+        registerMenu.SetActive(true);
+    }
+    public void EventGamePlay()
+    {
+        Debug.Log($"GamePlay");
+        backGroundUI.SetActive(false);
+        mainMenu.SetActive(false);
+        playerUI.SetActive(true);
+        gameMenu.SetActive(true);
+
+    }
+    public void EventRanking()
+    {
+        Debug.Log($"Ranking");
+        backGroundUI.SetActive(false);
+        mainMenu.SetActive(false);
+        rankingMenu.SetActive(true);
+    }
+
+    public void EventOnePlay()
+    {
+
+    }
+
+    public void EventTwoPlay()
+    {
+        FadeManager.Instance.fade.StartFadeIn(1.0f, move);
+    }
+
+    public void EventPractice()
+    {
+
+    }
+
+
+    // Inputä÷êî
     public void ButtonX(InputAction.CallbackContext context)
     {
         if (context.started)

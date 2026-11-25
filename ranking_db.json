@@ -203,6 +203,16 @@
             "recordID": 219,
             "playerID": 2,
             "playDate": 202611191552
+        },
+        {
+            "recordID": 315,
+            "playerID": 3,
+            "playDate": 202611212137
+        },
+        {
+            "recordID": 220,
+            "playerID": 2,
+            "playDate": 202611212137
         }
     ],
     "details": [
@@ -585,6 +595,26 @@
             "score": 216000,
             "avgSpeed": 11.25,
             "maxCombo": 675
+        },
+        {
+            "detailID": 39,
+            "recordID": 315,
+            "round": 15,
+            "correct": 526,
+            "miss": 0,
+            "score": 170300,
+            "avgSpeed": 8.770000457763672,
+            "maxCombo": 526
+        },
+        {
+            "detailID": 40,
+            "recordID": 220,
+            "round": 1,
+            "correct": 0,
+            "miss": 0,
+            "score": 0,
+            "avgSpeed": 0.0,
+            "maxCombo": 0
         }
     ]
 }
