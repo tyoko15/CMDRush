@@ -213,6 +213,76 @@
             "recordID": 220,
             "playerID": 2,
             "playDate": 202611212137
+        },
+        {
+            "recordID": 316,
+            "playerID": 3,
+            "playDate": 202611261428
+        },
+        {
+            "recordID": 221,
+            "playerID": 2,
+            "playDate": 202611261428
+        },
+        {
+            "recordID": 317,
+            "playerID": 3,
+            "playDate": 202611261436
+        },
+        {
+            "recordID": 222,
+            "playerID": 2,
+            "playDate": 202611261436
+        },
+        {
+            "recordID": 318,
+            "playerID": 3,
+            "playDate": 202611261438
+        },
+        {
+            "recordID": 223,
+            "playerID": 2,
+            "playDate": 202611261438
+        },
+        {
+            "recordID": 319,
+            "playerID": 3,
+            "playDate": 202611261450
+        },
+        {
+            "recordID": 224,
+            "playerID": 2,
+            "playDate": 202611261450
+        },
+        {
+            "recordID": 320,
+            "playerID": 3,
+            "playDate": 202611261451
+        },
+        {
+            "recordID": 225,
+            "playerID": 2,
+            "playDate": 202611261451
+        },
+        {
+            "recordID": 321,
+            "playerID": 3,
+            "playDate": 202611261505
+        },
+        {
+            "recordID": 226,
+            "playerID": 2,
+            "playDate": 202611261505
+        },
+        {
+            "recordID": 322,
+            "playerID": 3,
+            "playDate": 202611261508
+        },
+        {
+            "recordID": 227,
+            "playerID": 2,
+            "playDate": 202611261508
         }
     ],
     "details": [
@@ -609,6 +679,46 @@
         {
             "detailID": 40,
             "recordID": 220,
+            "round": 1,
+            "correct": 0,
+            "miss": 0,
+            "score": 0,
+            "avgSpeed": 0.0,
+            "maxCombo": 0
+        },
+        {
+            "detailID": 41,
+            "recordID": 321,
+            "round": 1,
+            "correct": 56,
+            "miss": 0,
+            "score": 0,
+            "avgSpeed": 0.9300000071525574,
+            "maxCombo": 56
+        },
+        {
+            "detailID": 42,
+            "recordID": 226,
+            "round": 1,
+            "correct": 0,
+            "miss": 0,
+            "score": 0,
+            "avgSpeed": 0.0,
+            "maxCombo": 0
+        },
+        {
+            "detailID": 43,
+            "recordID": 322,
+            "round": 1,
+            "correct": 63,
+            "miss": 0,
+            "score": 0,
+            "avgSpeed": 6.300000190734863,
+            "maxCombo": 63
+        },
+        {
+            "detailID": 44,
+            "recordID": 227,
             "round": 1,
             "correct": 0,
             "miss": 0,

@@ -71,7 +71,7 @@ public class InputManager : MonoBehaviour
     {
         if (context.started)
         {
-            if (TwoPMatchGameManager.Instance.setUpPracticeNotesFlag)
+            if (GameManager.Instance.setUpPracticeNotesFlag)
             {
                 if (Gamepad.all.Count == 0)
                 {
@@ -115,9 +115,9 @@ public class InputManager : MonoBehaviour
     }
     public void ButtonB(InputAction.CallbackContext context)
     {
-        //if (context.started)
-        //{
-            if (TwoPMatchGameManager.Instance.setUpPracticeNotesFlag)
+        if (context.started)
+        {
+            if (GameManager.Instance.setUpPracticeNotesFlag)
             {
                 if (Gamepad.all.Count == 0)
                 {
@@ -157,13 +157,13 @@ public class InputManager : MonoBehaviour
                     else if (gamepads[1].deviceId == inputDevice.deviceId && notesManagers[1].inputAllowedFlag) notesManagers[1].SetSelectCommand(3);
                 }
             }
-        //}
+        }
     }
     public void ButtonX(InputAction.CallbackContext context)
     {
         if (context.started)
         {
-            if (TwoPMatchGameManager.Instance.setUpPracticeNotesFlag)
+            if (GameManager.Instance.setUpPracticeNotesFlag)
             {
                 if (Gamepad.all.Count == 0)
                 {
@@ -209,7 +209,7 @@ public class InputManager : MonoBehaviour
     {
         if (context.started)
         {
-            if (TwoPMatchGameManager.Instance.setUpPracticeNotesFlag)
+            if (GameManager.Instance.setUpPracticeNotesFlag)
             {
                 if (Gamepad.all.Count == 0)
                 {
@@ -273,6 +273,21 @@ public class InputManager : MonoBehaviour
                 if (gamepads[0].deviceId == inputDevice.deviceId) notesManagers[0].SetNotesDesign();
                 else if (gamepads[1].deviceId == inputDevice.deviceId) notesManagers[1].SetNotesDesign();
             }
+        }
+    }
+
+    public void ButtonPlayerNameChange(InputAction.CallbackContext context)
+    {
+        if (context.started) GameManager.Instance.playerNameChangeFlag = true;
+        else if (context.canceled) GameManager.Instance.playerNameChangeFlag = false;
+    }
+
+    public void ButtonPlayerNameChangeMove(InputAction.CallbackContext context)
+    {
+        if (GameManager.Instance.playerNameChangeFlag)
+        {
+            if (context.ReadValue<Vector2>().x < 0) GameManager.Instance.playerNameChange++;
+            else GameManager.Instance.playerNameChange--;
         }
     }
 }

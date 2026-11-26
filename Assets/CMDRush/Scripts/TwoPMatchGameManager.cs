@@ -5,15 +5,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class TwoPMatchGameManager : MonoBehaviour
+public class TwoPMatchGameManager : GameManager
 {
-    public string[] playerNames = new string[2];
-
-    public static TwoPMatchGameManager Instance;
-
-    public NotesManager[] notesManagers = new NotesManager[2];
-    public PlayerInput[] playerInputs = new PlayerInput[2];
-
+    [SerializeField] TextMeshProUGUI[] nameTexts = new TextMeshProUGUI[2];
     [SerializeField] TextMeshProUGUI[] readyTexts = new TextMeshProUGUI[2];
     [SerializeField] TextMeshProUGUI[] okTexts = new TextMeshProUGUI[2];
 
@@ -32,20 +26,15 @@ public class TwoPMatchGameManager : MonoBehaviour
     TextMeshProUGUI[] resultMaxComboTexts = new TextMeshProUGUI[2];
     TextMeshProUGUI[] resultScoreTexts = new TextMeshProUGUI[2];
 
-    public bool setUpPracticeNotesFlag;
+
     public bool startFlag;
-    public bool[] readyFlags = new bool[2];
+
     [SerializeField] float readyTime;
     float readyTimer;
     [SerializeField] float startTime;
     float startTimer;
 
-    public bool gameFlag;
-    [SerializeField] float gameLimitMinute;
-    int gameMinute;
     float gameTimer;
-
-    public bool setupFlag;
 
     Action getFade;
     Action moveScene;
@@ -125,7 +114,15 @@ public class TwoPMatchGameManager : MonoBehaviour
 
         startCountDownText = gameUI.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         gameTimerText = gameUI.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
-        gameTimerText.text = $"01:00";
+
+        nameTexts[0].text = playerNames[0];
+        nameTexts[1].text = playerNames[1];
+        gameTimer = gameLimitSecond;
+        int minutes = Mathf.FloorToInt(gameTimer / 60f);
+        int seconds = Mathf.FloorToInt(gameTimer % 60f);
+        gameTimerText.text = $"{minutes.ToString("00")}:{seconds.ToString("00")}";
+
+
     }
 
     IEnumerator GetFadeManager()
@@ -184,10 +181,9 @@ public class TwoPMatchGameManager : MonoBehaviour
 
     void GameTime()
     {
-        if (gameMinute == gameLimitMinute)
+        if (gameTimer <= 0f)
         {
             gameTimerText.text = $"00:00";
-            gameMinute = 0;
             gameTimer = 0f;
             gameFlag = false;
             notesManagers[0].ControllerStop();
@@ -198,19 +194,13 @@ public class TwoPMatchGameManager : MonoBehaviour
         }
         else
         {
-            gameTimer += Time.deltaTime;
+            gameTimer -= Time.deltaTime;
             // Œø‰Ê‰¹
-            if (gameLimitMinute - 1 == gameMinute && gameTimer > 55f) if (!AudioManager.Instance.sources[10].isPlaying) AudioManager.Instance.PlaySE(10);
+            if (gameTimer <= 5f) if (!AudioManager.Instance.sources[10].isPlaying) AudioManager.Instance.PlaySE(10);
 
-            if (gameTimer > 60f)
-            {
-                gameTimer = 0f;
-                gameMinute++;
-            }
-            float s = 60f - gameTimer;
-            if (s > 59f) s = 59f;
-            int m = (int)gameLimitMinute - gameMinute;
-            gameTimerText.text = $"{0}:{s.ToString("00")}";
+            int minutes = Mathf.FloorToInt(gameTimer / 60f);
+            int seconds = Mathf.FloorToInt(gameTimer % 60f);
+            gameTimerText.text = $"{minutes.ToString("00")}:{seconds.ToString("00")}";
         }
     }
 

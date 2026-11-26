@@ -71,6 +71,8 @@ public class NotesManager : MonoBehaviour
     int scoreRote;
     bool comboFlag;
     int comboCount;
+
+
     void Start()
     {
 
@@ -88,7 +90,7 @@ public class NotesManager : MonoBehaviour
         if (setUpPracticeNotesFlag) SetupPracticeNotes();
         //if (setUpNotesFlag) SetUpNotes();
         if (setUpPracticeNotesFlag) CommandControl();
-        if (TwoPMatchGameManager.Instance.gameFlag)
+        if (GameManager.Instance.gameFlag)
         {
             CommandControl();
             if (addNotesFlag) AddNotes();
@@ -131,8 +133,8 @@ public class NotesManager : MonoBehaviour
         GameObject n = Instantiate(notesPrefab, Vector2.zero, Quaternion.identity);
         NotesData d = new NotesData();
         d.number = 0;
-        //d.type = (NotesType)Random.Range(0, 4);
-        d.type = (NotesType)3;
+        if (GameManager.Instance.gameMode == GameMode.TwoMatch) d.type = (NotesType)Random.Range(0, 4);
+        if (GameManager.Instance.gameMode == GameMode.Tapping) d.type = (NotesType)3;
         n.GetComponent<Notes>().notesManager = this;
         n.GetComponent<Notes>().data = d;
         if (!changeNotesDesignFlag)
@@ -250,7 +252,7 @@ public class NotesManager : MonoBehaviour
             }
         }
 
-        TwoPMatchGameManager.Instance.setupFlag = true;
+        GameManager.Instance.setupFlag = true;
         setUpNotesFlag = false;
     }
 
@@ -410,18 +412,25 @@ public class NotesManager : MonoBehaviour
                 comboCount++;
 
                 // Œø‰Ê‰¹
-                AudioManager.Instance.PlaySE(successSECount);
-                if (totalCorrectAnswer-1 == correctAnswerRate)
+                if (GameManager.Instance.gameMode == GameMode.TwoMatch)
                 {
-                    successSECount = 7;
+                    AudioManager.Instance.PlaySE(successSECount);
+                    if (totalCorrectAnswer - 1 == correctAnswerRate)
+                    {
+                        successSECount = 7;
+                    }
+                    else if (totalCorrectAnswer - 2 == correctAnswerRate)
+                    {
+                        successSECount = 6;
+                    }
+                    else
+                    {
+                        if (correctAnswerRate % roundCount == 0) successSECount++;
+                    }
                 }
-                else if (totalCorrectAnswer-2 == correctAnswerRate)
+                else if (GameManager.Instance.gameMode == GameMode.Tapping)
                 {
-                    successSECount = 6;
-                }
-                else
-                {
-                    if (correctAnswerRate % roundCount == 0) successSECount++;
+                    AudioManager.Instance.PlaySE(2);
                 }
 
 
@@ -459,7 +468,7 @@ public class NotesManager : MonoBehaviour
                     AudioManager.Instance.PlaySE(8);
                 }
             }
-            avgSpeed = (correctCount + missCount) / 60f;
+            avgSpeed = (correctCount + missCount) / GameManager.Instance.gameLimitSecond;
             maxCombo = (maxCombo < comboCount) ? comboCount : maxCombo;
             countDownTimer = 0;
             commandFlag = false;
@@ -482,7 +491,7 @@ public class NotesManager : MonoBehaviour
                 if (notesList.Count == 0)
                 {
                     notesCount = 0;
-                    TwoPMatchGameManager.Instance.readyFlags[playerNumber] = true;
+                    GameManager.Instance.readyFlags[playerNumber] = true;
                     setUpPracticeNotesFlag = false;
                 }
             }
